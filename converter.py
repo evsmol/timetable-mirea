@@ -90,24 +90,23 @@ timetable = [['date', 'week', 'week_day',
               'discipline', 'activity_type',
               'teacher', 'auditorium']]
 
+# начальная неделя семестра
 first_week = int(dates[0].split()[1])
 
-normal_disciplines = list(
-    filter(lambda x: 'н. ' not in x[4] and 'н ' not in x[4], timelist)
-)
-exceptional_disciplines = list(
-    filter(lambda x: 'н. ' in x[4] or 'н ' in x[4], timelist)
-)
-
+# заполнение таблицы
 for row in timelist:
     week, week_day, group, pair_number, discipline, activity_type, teacher, \
         auditorium = row
+
+    # проход по датам
     for date in dates:
         date = (date.split()[0], int(date.split()[1]), int(date.split()[2]))
+        # проверка на день
         if (date[1] - first_week + 1) % 2 == week and date[2] == week_day:
+            discipline = row[4]
+            # проверка на исключения
             if 'н. ' in discipline or 'н ' in discipline:
-                if 'кр.' in discipline:
-                    print(row)
+                if 'кр.' in discipline or 'кр ' in discipline:
                     exception_weeks = tuple(
                         map(int,
                             discipline.split('н')[0].strip('кр. ').split(','))
@@ -115,13 +114,28 @@ for row in timelist:
                     if (date[1] - first_week + 1) in exception_weeks:
                         continue
 
-                    discipline = 'н'.join(
-                        discipline.split('н')[1:]
-                    ).lstrip('. ')
+                elif '-' in discipline.split('н')[0]:
+                    span = tuple(
+                        map(int,
+                            discipline.split('н')[0].strip().split('-'))
+                    )
+                    necessary_weeks = list(range(span[0], span[1] + 1))
+
+                    if (date[1] - first_week + 1) not in necessary_weeks:
+                        continue
+
+                else:
+                    necessary_weeks = tuple(
+                        map(int,
+                            discipline.split('н')[0].strip().split(','))
+                    )
+                    if (date[1] - first_week + 1) not in necessary_weeks:
+                        continue
+
+                discipline = 'н'.join(
+                    discipline.split('н')[1:]
+                ).lstrip('. ')
 
             timetable.append([date[0], date[1] - first_week + 1, date[2],
                               group, pair_number, discipline,
                               activity_type, teacher, auditorium])
-
-for row in timetable:
-    print(row)
