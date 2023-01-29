@@ -2,6 +2,7 @@ from openpyxl import load_workbook
 from pandas import date_range
 
 from datetime import datetime
+import csv
 
 # загрузка книги
 workbook = load_workbook('test.xlsx', read_only=True)
@@ -139,3 +140,8 @@ for row in timelist:
             timetable.append([date[0], date[1] - first_week + 1, date[2],
                               group, pair_number, discipline,
                               activity_type, teacher, auditorium])
+
+
+with open('test.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(timetable)
