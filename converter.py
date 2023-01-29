@@ -65,10 +65,24 @@ for col in range(0, len(worksheet_list[1])):
         teacher = worksheet_list[row][col + 2].value
         auditorium = worksheet_list[row][col + 3].value
 
-        timelist.append((week, week_day,
-                         cell.strip(), pair_number,
-                         discipline.strip(), activity_type.strip(),
-                         teacher.strip(), auditorium.strip()))
+        if '\n' not in discipline:
+            timelist.append((week, week_day,
+                             cell.strip(), pair_number,
+                             discipline.strip(), activity_type.strip(),
+                             teacher.strip(), auditorium.strip()))
+        else:
+            timelist.append((week, week_day,
+                             cell.strip(), pair_number,
+                             discipline.split('\n')[0].strip(),
+                             activity_type.split('\n')[0].strip(),
+                             ' '.join(teacher.split()[:2]).strip(),
+                             auditorium.split('\n')[0].strip()))
+            timelist.append((week, week_day,
+                             cell.strip(), pair_number,
+                             discipline.split('\n')[1].strip(),
+                             activity_type.split('\n')[1].strip(),
+                             ' '.join(teacher.split()[2:]).strip(),
+                             auditorium.split('\n')[1].strip()))
 
 # таблица с расписанием
 timetable = [['date', 'week', 'week_day',
@@ -85,28 +99,29 @@ exceptional_disciplines = list(
     filter(lambda x: 'н. ' in x[4] or 'н ' in x[4], timelist)
 )
 
-for discipline in normal_disciplines:
+for row in timelist:
+    week, week_day, group, pair_number, discipline, activity_type, teacher, \
+        auditorium = row
     for date in dates:
         date = (date.split()[0], int(date.split()[1]), int(date.split()[2]))
-        if (date[1] - first_week + 1) % 2 == discipline[0] and \
-                date[2] == discipline[1]:
-            if '\n' not in discipline[4]:
-                timetable.append([date[0], date[1] - first_week + 1, date[2],
-                                  discipline[2], discipline[3], discipline[4],
-                                  discipline[5], discipline[6], discipline[7]])
-            else:
-                timetable.append([date[0], date[1] - first_week + 1, date[2],
-                                  discipline[2], discipline[3],
-                                  discipline[4].split('\n')[0],
-                                  discipline[5].split('\n')[0],
-                                  ' '.join(discipline[6].split()[:2]),
-                                  discipline[7].split('\n')[0]])
-                timetable.append([date[0], date[1] - first_week + 1, date[2],
-                                  discipline[2], discipline[3],
-                                  discipline[4].split('\n')[1],
-                                  discipline[5].split('\n')[1],
-                                  ' '.join(discipline[6].split()[2:]),
-                                  discipline[7].split('\n')[1]])
+        if (date[1] - first_week + 1) % 2 == week and date[2] == week_day:
+            if 'н. ' in discipline or 'н ' in discipline:
+                if 'кр.' in discipline:
+                    print(row)
+                    exception_weeks = tuple(
+                        map(int,
+                            discipline.split('н')[0].strip('кр. ').split(','))
+                    )
+                    if (date[1] - first_week + 1) in exception_weeks:
+                        continue
+
+                    discipline = 'н'.join(
+                        discipline.split('н')[1:]
+                    ).lstrip('. ')
+
+            timetable.append([date[0], date[1] - first_week + 1, date[2],
+                              group, pair_number, discipline,
+                              activity_type, teacher, auditorium])
 
 for row in timetable:
     print(row)
