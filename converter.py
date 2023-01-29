@@ -77,5 +77,11 @@ timetable = [['date', 'week', 'week_day',
               'teacher', 'auditorium']]
 
 first_week = int(dates[0].split()[1])
-for row in timelist:
-    print(row)
+
+normal_disciplines = list(
+    filter(lambda x: 'н. ' not in x[4] and 'н ' not in x[4], timelist)
+)
+exceptional_disciplines = list(
+    filter(lambda x: 'н. ' in x[4] or 'н ' in x[4], timelist)
+)
+print(timelist)
