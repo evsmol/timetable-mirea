@@ -18,12 +18,12 @@ timelist = list()
 
 # список с датами
 start_date = datetime(2022, 9, 1)
-end_date = datetime(2023, 12, 22)
+end_date = datetime(2022, 12, 22)
 
 dates = date_range(
     min(start_date, end_date),
     max(start_date, end_date)
-).strftime('%d/%m/%Y %W %w').tolist()
+).strftime('%d.%m.%Y %W %w').tolist()
 
 # заполнение словаря
 for col in range(0, len(worksheet_list[1])):
@@ -66,9 +66,9 @@ for col in range(0, len(worksheet_list[1])):
         auditorium = worksheet_list[row][col + 3].value
 
         timelist.append((week, week_day,
-                         cell, pair_number,
-                         discipline, activity_type,
-                         teacher, auditorium))
+                         cell.strip(), pair_number,
+                         discipline.strip(), activity_type.strip(),
+                         teacher.strip(), auditorium.strip()))
 
 # таблица с расписанием
 timetable = [['date', 'week', 'week_day',
@@ -84,4 +84,29 @@ normal_disciplines = list(
 exceptional_disciplines = list(
     filter(lambda x: 'н. ' in x[4] or 'н ' in x[4], timelist)
 )
-print(timelist)
+
+for discipline in normal_disciplines:
+    for date in dates:
+        date = (date.split()[0], int(date.split()[1]), int(date.split()[2]))
+        if (date[1] - first_week + 1) % 2 == discipline[0] and \
+                date[2] == discipline[1]:
+            if '\n' not in discipline[4]:
+                timetable.append([date[0], date[1] - first_week + 1, date[2],
+                                  discipline[2], discipline[3], discipline[4],
+                                  discipline[5], discipline[6], discipline[7]])
+            else:
+                timetable.append([date[0], date[1] - first_week + 1, date[2],
+                                  discipline[2], discipline[3],
+                                  discipline[4].split('\n')[0],
+                                  discipline[5].split('\n')[0],
+                                  ' '.join(discipline[6].split()[:2]),
+                                  discipline[7].split('\n')[0]])
+                timetable.append([date[0], date[1] - first_week + 1, date[2],
+                                  discipline[2], discipline[3],
+                                  discipline[4].split('\n')[1],
+                                  discipline[5].split('\n')[1],
+                                  ' '.join(discipline[6].split()[2:]),
+                                  discipline[7].split('\n')[1]])
+
+for row in timetable:
+    print(row)
