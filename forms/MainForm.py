@@ -147,4 +147,8 @@ class MainForm(QMainWindow):
         fill_dates(self.day_list, dates)
 
     def toolbar_button_click_report(self):
-        pass
+        url = f'mailto:smolencev@mirea.ru' \
+              f'?subject=Ошибка в приложении Учебное расписание РТУ МИРЭА ' \
+              f'(v{VERSION})' \
+              f'&body=Подробно опишите ошибку, приложите скриншоты:'
+        QDesktopServices.openUrl(QUrl(url))
