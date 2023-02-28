@@ -1,8 +1,8 @@
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt, QSize, QUrl
 from PyQt6.QtWidgets import QMainWindow, QWidget
 from PyQt6.QtWidgets import QGridLayout, QStatusBar, QToolBar, \
     QLabel, QPushButton, QListWidget, QListWidgetItem
-from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtGui import QAction, QIcon, QDesktopServices
 
 from config import VERSION
 
@@ -10,7 +10,7 @@ from data.update_time_func import get_time
 
 from mainform_func import fill_dates
 
-from calendar_func import set_now_month
+from calendar_func import set_now_month, set_previous_month, set_next_month
 
 
 class MainForm(QMainWindow):
@@ -115,6 +115,7 @@ class MainForm(QMainWindow):
         self.widget.setLayout(self.layout)
         self.setCentralWidget(self.widget)
 
+        # заполнение дат
         dates = set_now_month()
         fill_dates(self.day_list, dates)
 
@@ -128,10 +129,22 @@ class MainForm(QMainWindow):
         pass
 
     def toolbar_button_click_left(self):
-        pass
+        date = self.day_list[6].item(0).text()
+        for lst in self.day_list:
+            lst.clear()
+
+        # заполнение дат
+        dates = set_previous_month(date)
+        fill_dates(self.day_list, dates)
 
     def toolbar_button_click_right(self):
-        pass
+        date = self.day_list[6].item(0).text()
+        for lst in self.day_list:
+            lst.clear()
+
+        # заполнение дат
+        dates = set_next_month(date)
+        fill_dates(self.day_list, dates)
 
     def toolbar_button_click_report(self):
         pass

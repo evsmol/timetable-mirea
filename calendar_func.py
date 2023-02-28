@@ -22,7 +22,7 @@ def set_now_month():
 
 def set_previous_month(date):
     now_day = datetime.strptime(date.split(',')[0], '%d.%m.%Y')
-    last_day = now_day - timedelta(days=15)
+    last_day = now_day - timedelta(days=20)
 
     first_date = last_day.replace(day=1)
 
@@ -42,7 +42,7 @@ def set_previous_month(date):
 
 def set_next_month(date):
     now_day = datetime.strptime(date.split(',')[0], '%d.%m.%Y')
-    next_day = now_day + timedelta(days=15)
+    next_day = now_day + timedelta(days=35)
 
     first_date = next_day.replace(day=1)
 
