@@ -8,6 +8,10 @@ from config import VERSION
 
 from data.update_time_func import get_time
 
+from mainform_func import fill_dates
+
+from calendar_func import set_now_month
+
 
 class MainForm(QMainWindow):
     """Класс основного окна программы."""
@@ -100,16 +104,19 @@ class MainForm(QMainWindow):
         self.label_update.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.label_update, 6, 1, 1, 6)
 
-        day_list = [QListWidget() for _ in range(36)]
+        self.day_list = [QListWidget() for _ in range(36)]
         counter = 0
         for i in range(6):
             for j in range(1, 7):
-                self.layout.addWidget(day_list[counter], i, j)
+                self.layout.addWidget(self.day_list[counter], i, j)
                 counter += 1
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
         self.setCentralWidget(self.widget)
+
+        dates = set_now_month()
+        fill_dates(self.day_list, dates)
 
     def toolbar_button_click_info(self):
         pass
