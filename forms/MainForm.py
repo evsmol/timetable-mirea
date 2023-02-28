@@ -22,6 +22,7 @@ class MainForm(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle(f'Учебное расписание РТУ МИРЭА (v{VERSION})')
+        self.setWindowIcon(QIcon('image/main_icon.png'))
 
         # создание панели инструментов
         self.toolbar = QToolBar()
