@@ -12,6 +12,14 @@ class UpdateTime(SqlAlchemyBase):
         autoincrement=True
     )
 
-    date = sqlalchemy.Column(
+    update_date = sqlalchemy.Column(
+        sqlalchemy.TIME()
+    )
+
+    start_date = sqlalchemy.Column(
+        sqlalchemy.TIME()
+    )
+
+    finish_date = sqlalchemy.Column(
         sqlalchemy.TIME()
     )

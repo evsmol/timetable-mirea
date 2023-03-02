@@ -1,8 +1,10 @@
 from PyQt6.QtCore import Qt, QSize, QUrl
 from PyQt6.QtWidgets import QMainWindow, QWidget
-from PyQt6.QtWidgets import QGridLayout, QStatusBar, QToolBar, \
-    QLabel, QPushButton, QListWidget, QListWidgetItem
+from PyQt6.QtWidgets import QGridLayout, QToolBar, \
+    QLabel, QPushButton, QListWidget
 from PyQt6.QtGui import QAction, QIcon, QDesktopServices
+
+from forms import DateForm
 
 from config import VERSION
 
@@ -22,7 +24,7 @@ class MainForm(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle(f'Учебное расписание РТУ МИРЭА (v{VERSION})')
-        self.setWindowIcon(QIcon('image/main_icon.png'))
+        self.setWindowIcon(QIcon('image/icon.png'))
 
         # создание панели инструментов
         self.toolbar = QToolBar()
@@ -124,7 +126,8 @@ class MainForm(QMainWindow):
         pass
 
     def toolbar_button_click_download(self):
-        pass
+        self.date_form = DateForm.DateForm()
+        self.date_form.show()
 
     def toolbar_button_click_filter(self):
         pass
