@@ -13,9 +13,11 @@ def get_time():
         db_sess.close()
 
 
-def set_time(time):
+def set_time(update_time, start_time, finish_time):
     time = UpdateTime()
-    time.date = time
+    time.update_date = update_time
+    time.start_date = start_time
+    time.finish_date = finish_time
 
     db_sess = db_session.create_session()
 
