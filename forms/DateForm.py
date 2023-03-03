@@ -63,4 +63,5 @@ class DateForm(QMainWindow):
         self.setCentralWidget(self.widget)
 
     def button_click_accept(self):
+
         self.close()

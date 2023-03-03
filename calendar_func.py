@@ -2,6 +2,22 @@ from pandas import date_range
 
 from datetime import datetime, timedelta
 
+from data.update_time_func import get_time
+
+
+def get_list_dates(dates):
+    dates = list(filter(lambda x: x[-1] != '0', dates))
+
+    time = get_time()
+    if time is None:
+        dates = [x.split()[0] for x in dates]
+        return dates
+
+    first_week = int(time[2].week)
+    dates = [x.split()[0] + f', {int(x.split()[1]) - first_week + 1}'
+             for x in dates]
+    return dates
+
 
 def set_now_month():
     first_date = datetime.today().replace(day=1)
@@ -12,12 +28,9 @@ def set_now_month():
     dates = date_range(
             min(start_date, end_date),
             max(start_date, end_date)
-        ).strftime('%d.%m.%Y, %W н. %w').tolist()
+        ).strftime('%d.%m.%Y %W %w').tolist()
 
-    dates = list(filter(lambda x: x[-1] != '0', dates))
-    dates = [x[:-2] for x in dates]
-
-    return dates
+    return get_list_dates(dates)
 
 
 def set_previous_month(date):
@@ -32,12 +45,9 @@ def set_previous_month(date):
     dates = date_range(
         min(start_date, end_date),
         max(start_date, end_date)
-    ).strftime('%d.%m.%Y, %W н. %w').tolist()
+    ).strftime('%d.%m.%Y %W %w').tolist()
 
-    dates = list(filter(lambda x: x[-1] != '0', dates))
-    dates = [x[:-2] for x in dates]
-
-    return dates
+    return get_list_dates(dates)
 
 
 def set_next_month(date):
@@ -52,9 +62,6 @@ def set_next_month(date):
     dates = date_range(
         min(start_date, end_date),
         max(start_date, end_date)
-    ).strftime('%d.%m.%Y, %W н. %w').tolist()
+    ).strftime('%d.%m.%Y %W %w').tolist()
 
-    dates = list(filter(lambda x: x[-1] != '0', dates))
-    dates = [x[:-2] for x in dates]
-
-    return dates
+    return get_list_dates(dates)
