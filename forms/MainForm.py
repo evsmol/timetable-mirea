@@ -103,6 +103,8 @@ class MainForm(QMainWindow):
         time = get_time()
         if time is None:
             time = '<i>расписание не загружалось</i>'
+        else:
+            time = time[0]
         self.label_update = QLabel(f'Последнее обновление расписания: {time}')
         self.label_update.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.label_update, 6, 1, 1, 6)
@@ -122,11 +124,23 @@ class MainForm(QMainWindow):
         dates = set_now_month()
         fill_dates(self.day_list, dates)
 
+    def update_dates(self):
+        dates = set_now_month()
+        fill_dates(self.day_list, dates)
+
+    def update_time_download(self):
+        time = get_time()
+        if time is None:
+            time = '<i>расписание не загружалось</i>'
+        else:
+            time = time[0]
+        self.label_update.setText(f'Последнее обновление расписания: {time}')
+
     def toolbar_button_click_info(self):
         pass
 
     def toolbar_button_click_download(self):
-        self.date_form = DateForm.DateForm()
+        self.date_form = DateForm.DateForm(self)
         self.date_form.show()
 
     def toolbar_button_click_filter(self):

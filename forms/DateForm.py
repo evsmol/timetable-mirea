@@ -11,8 +11,9 @@ from data.update_time_func import get_time, set_time
 class DateForm(QMainWindow):
     """Класс окна выбора диапазона дат."""
 
-    def __init__(self):
+    def __init__(self, MainForm):
         super().__init__()
+        self.main_form = MainForm
         self.initUI()
 
     def initUI(self):
@@ -41,8 +42,8 @@ class DateForm(QMainWindow):
         time_finish = datetime.now()
         time = get_time()
         if time:
-            time_start = time[2]
-            time_finish = time[3]
+            time_start = datetime.strptime(time[1], '%d.%m.%Y')
+            time_finish = datetime.strptime(time[2], '%d.%m.%Y')
 
         self.date_start = QDateEdit(QDate(time_start.year,
                                           time_start.month,
@@ -63,5 +64,13 @@ class DateForm(QMainWindow):
         self.setCentralWidget(self.widget)
 
     def button_click_accept(self):
+        set_time(
+            datetime.now().strftime('%d.%m.%Y %H:%M:%S'),
+            self.date_start.text(),
+            self.date_finish.text()
+        )
+
+        self.main_form.update_dates()
+        self.main_form.update_time_download()
 
         self.close()

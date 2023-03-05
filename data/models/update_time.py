@@ -13,13 +13,13 @@ class UpdateTime(SqlAlchemyBase):
     )
 
     update_date = sqlalchemy.Column(
-        sqlalchemy.TIME()
+        sqlalchemy.VARCHAR(length=19)
     )
 
     start_date = sqlalchemy.Column(
-        sqlalchemy.TIME()
+        sqlalchemy.VARCHAR(length=10)
     )
 
     finish_date = sqlalchemy.Column(
-        sqlalchemy.TIME()
+        sqlalchemy.VARCHAR(length=10)
     )
