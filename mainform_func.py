@@ -1,8 +1,17 @@
 from PyQt6.QtWidgets import QListWidgetItem
+from PyQt6.QtGui import QBrush, QColor
+
+from datetime import datetime
 
 
 def fill_dates(day_list, dates):
     for day in day_list:
         day.clear()
     for i, lst_widget in enumerate(day_list):
-        lst_widget.addItem(QListWidgetItem(dates[i]))
+        if datetime.strptime(dates[i].split(',')[0], '%d.%m.%Y') == \
+                datetime.today():
+            item = QListWidgetItem(dates[i])
+            item.setBackground(QColor('#926bff'))
+            lst_widget.addItem(item)
+        else:
+            lst_widget.addItem(QListWidgetItem(dates[i]))

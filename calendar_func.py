@@ -14,8 +14,6 @@ def get_list_dates(dates):
         return dates
 
     first_week = int(datetime.strptime(time[1], '%d.%m.%Y').strftime('%W'))
-    print(dates)
-    print(first_week)
     dates = [x.split()[0] + f', {(int(x.split()[1]) - first_week + 1) % 52} н.'
              for x in dates]
     return dates

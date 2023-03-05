@@ -134,7 +134,7 @@ class MainForm(QMainWindow):
             time = '<i>расписание не загружалось</i>'
         else:
             time = time[0]
-        self.label_update.setText(f'Последнее обновление расписания: {time}')
+        self.label_update.setText(f'Последняя загрузка расписания: {time}')
 
     def toolbar_button_click_info(self):
         pass
