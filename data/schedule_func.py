@@ -26,3 +26,6 @@ def add_pairs(timetable):
         return
     finally:
         db_sess.close()
+
+
+

@@ -1,10 +1,10 @@
 from PyQt6.QtCore import Qt, QSize, QUrl
 from PyQt6.QtWidgets import QMainWindow, QWidget
 from PyQt6.QtWidgets import QGridLayout, QToolBar, \
-    QLabel, QPushButton, QListWidget
+    QLabel, QPushButton, QListWidget, QListWidgetItem
 from PyQt6.QtGui import QAction, QIcon, QDesktopServices
 
-from forms import DateForm
+from forms import DateForm, FilterForm
 
 from config import VERSION
 
@@ -91,6 +91,13 @@ class MainForm(QMainWindow):
         self.groups_list = QListWidget()
         self.layout.addWidget(self.groups_list, 0, 0, 2, 1)
 
+        for i in range(100):
+            text = f'Ковалевская М.П. {i}'
+            item = QListWidgetItem(text)
+            item.setCheckState(Qt.CheckState.Unchecked)
+            print(item.checkState() == Qt.CheckState.Unchecked)
+            self.groups_list.addItem(item)
+
         self.teachers_list = QListWidget()
         self.layout.addWidget(self.teachers_list, 2, 0, 2, 1)
 
@@ -105,7 +112,7 @@ class MainForm(QMainWindow):
             time = '<i>расписание не загружалось</i>'
         else:
             time = time[0]
-        self.label_update = QLabel(f'Последнее обновление расписания: {time}')
+        self.label_update = QLabel(f'Последняя загрузка расписания: {time}')
         self.label_update.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.label_update, 6, 1, 1, 6)
 
@@ -144,7 +151,8 @@ class MainForm(QMainWindow):
         self.date_form.show()
 
     def toolbar_button_click_filter(self):
-        pass
+        self.filter_form = FilterForm.FilterForm(self)
+        self.filter_form.show()
 
     def toolbar_button_click_left(self):
         date = self.day_list[6].item(0).text()
