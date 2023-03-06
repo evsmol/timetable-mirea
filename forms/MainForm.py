@@ -69,6 +69,13 @@ class MainForm(QMainWindow):
         )
         self.toolbar.addAction(self.button_action_left)
 
+        self.button_action_now = QAction(QIcon('image/now.png'),
+                                          'Текущий месяц', self)
+        self.button_action_now.triggered.connect(
+            self.toolbar_button_click_now
+        )
+        self.toolbar.addAction(self.button_action_now)
+
         self.button_action_right = QAction(QIcon('image/right.png'),
                                            'Следующий месяц', self)
         self.button_action_right.triggered.connect(
@@ -161,6 +168,11 @@ class MainForm(QMainWindow):
 
         # заполнение дат
         dates = set_previous_month(date)
+        fill_dates(self.day_list, dates)
+
+    def toolbar_button_click_now(self):
+        # заполнение дат
+        dates = set_now_month()
         fill_dates(self.day_list, dates)
 
     def toolbar_button_click_right(self):
