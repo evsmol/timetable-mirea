@@ -102,9 +102,10 @@ class MainForm(QMainWindow):
         # загрузка списка групп
         groups = load_group()
         for group in groups:
-            item = QListWidgetItem(group.group)
-            item.setCheckState(Qt.CheckState.Unchecked)
-            self.groups_list.addItem(item)
+            if group.selected:
+                item = QListWidgetItem(group.group)
+                item.setCheckState(Qt.CheckState.Unchecked)
+                self.groups_list.addItem(item)
 
         self.teachers_list = QListWidget()
         self.layout.addWidget(self.teachers_list, 2, 0, 2, 1)
@@ -112,9 +113,10 @@ class MainForm(QMainWindow):
         # загрузка списка преподавателей
         teachers = load_teacher()
         for teacher in teachers:
-            item = QListWidgetItem(teacher.teacher)
-            item.setCheckState(Qt.CheckState.Unchecked)
-            self.teachers_list.addItem(item)
+            if teacher.selected:
+                item = QListWidgetItem(teacher.teacher)
+                item.setCheckState(Qt.CheckState.Unchecked)
+                self.teachers_list.addItem(item)
 
         self.parameters_list = QListWidget()
         self.layout.addWidget(self.parameters_list, 4, 0, 2, 1)
@@ -149,6 +151,25 @@ class MainForm(QMainWindow):
     def update_dates(self):
         dates = set_now_month()
         fill_dates(self.day_list, dates)
+
+    def update_lists(self):
+        self.groups_list.clear()
+        # загрузка списка групп
+        groups = load_group()
+        for group in groups:
+            if group.selected:
+                item = QListWidgetItem(group.group)
+                item.setCheckState(Qt.CheckState.Unchecked)
+                self.groups_list.addItem(item)
+
+        self.teachers_list.clear()
+        # загрузка списка преподавателей
+        teachers = load_teacher()
+        for teacher in teachers:
+            if teacher.selected:
+                item = QListWidgetItem(teacher.teacher)
+                item.setCheckState(Qt.CheckState.Unchecked)
+                self.teachers_list.addItem(item)
 
     def update_time_download(self):
         time = get_time()

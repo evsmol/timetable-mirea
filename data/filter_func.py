@@ -1,3 +1,5 @@
+from PyQt6.QtCore import Qt
+
 from data import db_session
 from data.models.group import Group
 from data.models.teacher import Teacher
@@ -34,7 +36,7 @@ def update_group():
 
     groups = db_sess.query(Schedule).all()
 
-    groups_list = list(set([x.group for x in groups]))
+    groups_list = sorted(list(set([x.group for x in groups])))
 
     objects = [Group(group=x, selected=True) for x in groups_list]
     db_sess.bulk_save_objects(objects)
@@ -55,7 +57,7 @@ def update_teacher():
 
     teachers = db_sess.query(Schedule).all()
 
-    teachers_list = list(set([x.teacher for x in teachers]))
+    teachers_list = sorted(list(set([x.teacher for x in teachers])))
 
     objects = [Teacher(teacher=x, selected=True) for x in teachers_list]
     db_sess.bulk_save_objects(objects)
@@ -64,5 +66,51 @@ def update_teacher():
 
     try:
         return objects
+    finally:
+        db_sess.close()
+
+
+def change_group(items):
+    db_sess = db_session.create_session()
+
+    for item in items:
+        group = db_sess.query(Group).filter(
+            Group.group == item.text()
+        ).first()
+        if item.checkState() == Qt.CheckState.Checked:
+            group.selected = True
+        else:
+            group.selected = False
+
+        db_sess.add(group)
+        db_sess.flush()
+        db_sess.refresh(group)
+
+    db_sess.commit()
+
+    try:
+        return
+    finally:
+        db_sess.close()
+
+
+def change_teacher(items):
+    db_sess = db_session.create_session()
+
+    for item in items:
+        teacher = db_sess.query(Teacher).filter(
+            Teacher.teacher == item.text()
+        ).first()
+        if item.checkState() == Qt.CheckState.Checked:
+            teacher.selected = True
+        else:
+            teacher.selected = False
+
+        db_sess.add(teacher)
+
+    db_sess.commit()
+
+    try:
+        return
     finally:
         db_sess.close()

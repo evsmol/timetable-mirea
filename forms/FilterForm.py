@@ -4,7 +4,8 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QPushButton, \
     QListWidget, QListWidgetItem
 from PyQt6.QtGui import QIcon
 
-from data.filter_func import load_teacher, load_group
+from data.filter_func import load_teacher, load_group, \
+    change_teacher, change_group
 
 
 class FilterForm(QMainWindow):
@@ -97,5 +98,14 @@ class FilterForm(QMainWindow):
                 item.setCheckState(Qt.CheckState.Checked)
 
     def button_click_accept(self):
+        group_items = [self.group_lst.item(x)
+                       for x in range(self.group_lst.count())]
+        teacher_items = [self.teacher_lst.item(x)
+                         for x in range(self.teacher_lst.count())]
+
+        change_group(group_items)
+        change_teacher(teacher_items)
+
+        self.main_form.update_lists()
 
         self.close()
