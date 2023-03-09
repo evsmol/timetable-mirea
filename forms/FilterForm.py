@@ -30,10 +30,14 @@ class FilterForm(QMainWindow):
         self.layout.addWidget(self.label_space, 1, 0, 1, 2)
 
         self.group_btn = QPushButton('Выделить / снять выделение')
+        self.group_btn.clicked.connect(self.button_click_selected_group)
         self.layout.addWidget(self.group_btn, 2, 0, 1, 1)
+        self.group_flag = 1
 
         self.teacher_btn = QPushButton('Выделить / снять выделение')
+        self.teacher_btn.clicked.connect(self.button_click_selected_teacher)
         self.layout.addWidget(self.teacher_btn, 2, 1, 1, 1)
+        self.teacher_flag = 1
 
         self.group_lst = QListWidget()
         self.layout.addWidget(self.group_lst, 3, 0, 1, 1)
@@ -68,6 +72,29 @@ class FilterForm(QMainWindow):
             else:
                 item.setCheckState(Qt.CheckState.Unchecked)
             self.teacher_lst.addItem(item)
+
+    def button_click_selected_group(self):
+        items = [self.group_lst.item(x) for x in range(self.group_lst.count())]
+        if self.group_flag:
+            self.group_flag = 0
+            for item in items:
+                item.setCheckState(Qt.CheckState.Unchecked)
+        else:
+            self.group_flag = 1
+            for item in items:
+                item.setCheckState(Qt.CheckState.Checked)
+
+    def button_click_selected_teacher(self):
+        items = [self.teacher_lst.item(x)
+                 for x in range(self.teacher_lst.count())]
+        if self.teacher_flag:
+            self.teacher_flag = 0
+            for item in items:
+                item.setCheckState(Qt.CheckState.Unchecked)
+        else:
+            self.teacher_flag = 1
+            for item in items:
+                item.setCheckState(Qt.CheckState.Checked)
 
     def button_click_accept(self):
 
