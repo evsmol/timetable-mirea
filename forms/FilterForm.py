@@ -1,6 +1,10 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QMainWindow
-from PyQt6.QtWidgets import QGridLayout, QLabel, QPushButton, QListWidget
+from PyQt6.QtWidgets import QGridLayout, QLabel, QPushButton, \
+    QListWidget, QListWidgetItem
 from PyQt6.QtGui import QIcon
+
+from data.filter_func import load_teacher, load_group
 
 
 class FilterForm(QMainWindow):
@@ -44,6 +48,26 @@ class FilterForm(QMainWindow):
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
         self.setCentralWidget(self.widget)
+
+        # загрузка списка групп
+        groups = load_group()
+        for group in groups:
+            item = QListWidgetItem(group.group)
+            if group.selected:
+                item.setCheckState(Qt.CheckState.Checked)
+            else:
+                item.setCheckState(Qt.CheckState.Unchecked)
+            self.group_lst.addItem(item)
+
+        # загрузка списка преподавателей
+        teachers = load_teacher()
+        for teacher in teachers:
+            item = QListWidgetItem(teacher.teacher)
+            if teacher.selected:
+                item.setCheckState(Qt.CheckState.Checked)
+            else:
+                item.setCheckState(Qt.CheckState.Unchecked)
+            self.teacher_lst.addItem(item)
 
     def button_click_accept(self):
 

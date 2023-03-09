@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QListWidgetItem
-from PyQt6.QtGui import QBrush, QColor
+from PyQt6.QtGui import QColor
 
 from datetime import datetime
 

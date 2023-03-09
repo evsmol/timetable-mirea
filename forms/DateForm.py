@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QPushButton, QDateEdit
 from PyQt6.QtGui import QIcon
 
 from data.update_time_func import get_time, set_time
+from data.filter_func import update_teacher, update_group
 
 
 class DateForm(QMainWindow):
@@ -64,6 +65,10 @@ class DateForm(QMainWindow):
         self.setCentralWidget(self.widget)
 
     def button_click_accept(self):
+        # обновление списков групп и преподавателей
+        update_group()
+        update_teacher()
+
         set_time(
             datetime.now().strftime('%d.%m.%Y %H:%M:%S'),
             self.date_start.text(),

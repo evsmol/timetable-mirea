@@ -9,6 +9,7 @@ from forms import DateForm, FilterForm
 from config import VERSION
 
 from data.update_time_func import get_time
+from data.filter_func import load_group, load_teacher
 
 from mainform_func import fill_dates
 
@@ -98,15 +99,22 @@ class MainForm(QMainWindow):
         self.groups_list = QListWidget()
         self.layout.addWidget(self.groups_list, 0, 0, 2, 1)
 
-        for i in range(100):
-            text = f'Ковалевская М.П. {i}'
-            item = QListWidgetItem(text)
+        # загрузка списка групп
+        groups = load_group()
+        for group in groups:
+            item = QListWidgetItem(group.group)
             item.setCheckState(Qt.CheckState.Unchecked)
-            print(item.checkState() == Qt.CheckState.Unchecked)
             self.groups_list.addItem(item)
 
         self.teachers_list = QListWidget()
         self.layout.addWidget(self.teachers_list, 2, 0, 2, 1)
+
+        # загрузка списка преподавателей
+        teachers = load_teacher()
+        for teacher in teachers:
+            item = QListWidgetItem(teacher.teacher)
+            item.setCheckState(Qt.CheckState.Unchecked)
+            self.teachers_list.addItem(item)
 
         self.parameters_list = QListWidget()
         self.layout.addWidget(self.parameters_list, 4, 0, 2, 1)
