@@ -51,6 +51,16 @@ class MainForm(QMainWindow):
 
         self.toolbar.addSeparator()
 
+        self.button_action_check = QAction(QIcon('image/check.png'),
+                                           'Проверить загруженное расписание',
+                                           self)
+        self.button_action_check.triggered.connect(
+            self.toolbar_button_click_check
+        )
+        self.toolbar.addAction(self.button_action_check)
+
+        self.toolbar.addSeparator()
+
         self.button_action_filter = QAction(
             QIcon('image/filter.png'),
             'Избранные группы и преподаватели',
@@ -71,7 +81,7 @@ class MainForm(QMainWindow):
         self.toolbar.addAction(self.button_action_left)
 
         self.button_action_now = QAction(QIcon('image/now.png'),
-                                          'Текущий месяц', self)
+                                         'Текущий месяц', self)
         self.button_action_now.triggered.connect(
             self.toolbar_button_click_now
         )
@@ -185,6 +195,9 @@ class MainForm(QMainWindow):
     def toolbar_button_click_download(self):
         self.date_form = DateForm.DateForm(self)
         self.date_form.show()
+
+    def toolbar_button_click_check(self):
+        pass
 
     def toolbar_button_click_filter(self):
         self.filter_form = FilterForm.FilterForm(self)
