@@ -11,7 +11,7 @@ from config import VERSION
 from data.update_time_func import get_time
 from data.filter_func import load_group, load_teacher
 
-from mainform_func import fill_dates
+from mainform_func import fill_dates, get_pairs, fill_pairs
 
 from calendar_func import set_now_month, set_previous_month, set_next_month
 
@@ -132,6 +132,7 @@ class MainForm(QMainWindow):
         self.layout.addWidget(self.parameters_list, 4, 0, 2, 1)
 
         self.accept_btn = QPushButton('Применить')
+        self.accept_btn.clicked.connect(self.button_click_accept)
         self.layout.addWidget(self.accept_btn, 6, 0, 1, 1)
 
         time = get_time()
@@ -212,10 +213,14 @@ class MainForm(QMainWindow):
         dates = set_previous_month(date)
         fill_dates(self.day_list, dates)
 
+        fill_pairs(self.groups, self.teachers, self.day_list)
+
     def toolbar_button_click_now(self):
         # заполнение дат
         dates = set_now_month()
         fill_dates(self.day_list, dates)
+
+        fill_pairs(self.groups, self.teachers, self.day_list)
 
     def toolbar_button_click_right(self):
         date = self.day_list[6].item(0).text()
@@ -226,9 +231,36 @@ class MainForm(QMainWindow):
         dates = set_next_month(date)
         fill_dates(self.day_list, dates)
 
+        fill_pairs(self.groups, self.teachers, self.day_list)
+
     def toolbar_button_click_report(self):
         url = f'mailto:smolencev@mirea.ru' \
               f'?subject=Ошибка в приложении Учебное расписание РТУ МИРЭА ' \
               f'(v{VERSION})' \
               f'&body=Подробно опишите ошибку, приложите скриншоты:'
         QDesktopServices.openUrl(QUrl(url))
+
+    def button_click_accept(self):
+        for lst in self.day_list:
+            lst.clear()
+
+        # заполнение дат
+        dates = set_now_month()
+        fill_dates(self.day_list, dates)
+
+        group_items = [self.groups_list.item(x)
+                       for x in range(self.groups_list.count())]
+        group_lst = []
+        for item in group_items:
+            if item.checkState() == Qt.CheckState.Checked:
+                group_lst.append(item.text())
+
+        teacher_items = [self.teachers_list.item(x)
+                         for x in range(self.teachers_list.count())]
+        teacher_lst = []
+        for item in teacher_items:
+            if item.checkState() == Qt.CheckState.Checked:
+                teacher_lst.append(item.text())
+
+        self.groups, self.teachers = get_pairs(group_lst, teacher_lst)
+        fill_pairs(self.groups, self.teachers, self.day_list)

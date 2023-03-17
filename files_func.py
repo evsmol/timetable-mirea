@@ -5,7 +5,7 @@ import os
 from urllib import request
 import ssl
 
-from data.schedule_func import add_pairs
+from data.schedule_func import add_pairs, clear_table
 
 from converter import get_timetable
 
@@ -50,9 +50,10 @@ def load_files(files):
     return filenames
 
 
-def update_db():
+def update_db(day_start, day_end):
+    clear_table()
     for file in load_files(get_files('https://www.mirea.ru/schedule/')):
-        add_pairs(get_timetable(file))
+        add_pairs(get_timetable(file, day_start, day_end))
         # удаление просмотренного файла
         if os.path.isfile(file):
             os.remove(file)

@@ -4,7 +4,7 @@ from pandas import date_range
 from datetime import datetime
 
 
-def get_timetable(file):
+def get_timetable(file, day_start, date_end):
     # загрузка книги
     workbook = load_workbook(file, read_only=True)
     worksheet = workbook.active
@@ -19,8 +19,8 @@ def get_timetable(file):
     timelist = list()
 
     # список с датами
-    start_date = datetime(2022, 9, 1)
-    end_date = datetime(2022, 12, 22)
+    start_date = datetime.strptime(day_start, "%d.%m.%Y")
+    end_date = datetime.strptime(date_end, "%d.%m.%Y")
 
     dates = date_range(
         min(start_date, end_date),
@@ -65,6 +65,8 @@ def get_timetable(file):
             discipline = worksheet_list[row][col].value
             activity_type = worksheet_list[row][col + 1].value
             teacher = worksheet_list[row][col + 2].value
+            if teacher is None:
+                teacher = ''
             auditorium = worksheet_list[row][col + 3].value
 
             if '\n' not in discipline:
