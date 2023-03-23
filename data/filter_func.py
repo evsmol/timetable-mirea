@@ -36,7 +36,10 @@ def update_group():
 
     groups = db_sess.query(Schedule).all()
 
-    groups_list = sorted(list(set([x.group for x in groups])))
+    groups_list = sorted(
+        list(set([x.group for x in groups])),
+        key=lambda x: (x.split('-')[0], x.split('-')[2], x.split('-')[1])
+    )
 
     objects = [Group(group=x, selected=True) for x in groups_list]
     db_sess.bulk_save_objects(objects)
