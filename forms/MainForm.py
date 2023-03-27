@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt, QSize, QUrl
 from PyQt6.QtWidgets import QMainWindow, QWidget
 from PyQt6.QtWidgets import QGridLayout, QToolBar, \
     QLabel, QPushButton, QListWidget, QListWidgetItem
-from PyQt6.QtGui import QAction, QIcon, QDesktopServices
+from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor
 
 from forms import DateForm, FilterForm
 
@@ -131,6 +131,21 @@ class MainForm(QMainWindow):
         self.parameters_list = QListWidget()
         self.layout.addWidget(self.parameters_list, 4, 0, 2, 1)
 
+        parameters = [
+            'ФИО преподавателя',
+            'Номер группы',
+            'Номер аудитории',
+            'Тип занятия',
+            'Название дисциплины'
+        ]
+        item = QListWidgetItem('Параметры:')
+        item.setBackground(QColor('#4f4f4f'))
+        self.parameters_list.addItem(item)
+        for parameter in parameters:
+            item = QListWidgetItem(parameter)
+            item.setCheckState(Qt.CheckState.Checked)
+            self.parameters_list.addItem(item)
+
         self.accept_btn = QPushButton('Применить')
         self.accept_btn.clicked.connect(self.button_click_accept)
         self.layout.addWidget(self.accept_btn, 6, 0, 1, 1)
@@ -213,14 +228,16 @@ class MainForm(QMainWindow):
         dates = set_previous_month(date)
         fill_dates(self.day_list, dates)
 
-        fill_pairs(self.groups, self.teachers, self.day_list)
+        fill_pairs(self.groups, self.teachers, self.day_list,
+                   self.parameters_list)
 
     def toolbar_button_click_now(self):
         # заполнение дат
         dates = set_now_month()
         fill_dates(self.day_list, dates)
 
-        fill_pairs(self.groups, self.teachers, self.day_list)
+        fill_pairs(self.groups, self.teachers, self.day_list,
+                   self.parameters_list)
 
     def toolbar_button_click_right(self):
         date = self.day_list[6].item(0).text()
@@ -231,10 +248,11 @@ class MainForm(QMainWindow):
         dates = set_next_month(date)
         fill_dates(self.day_list, dates)
 
-        fill_pairs(self.groups, self.teachers, self.day_list)
+        fill_pairs(self.groups, self.teachers, self.day_list,
+                   self.parameters_list)
 
     def toolbar_button_click_report(self):
-        url = f'mailto:smolencev@mirea.ru' \
+        url = f'mailto:smolentsev@kb9-mirea.ru' \
               f'?subject=Ошибка в приложении Учебное расписание РТУ МИРЭА ' \
               f'(v{VERSION})' \
               f'&body=Подробно опишите ошибку, приложите скриншоты:'
@@ -263,4 +281,5 @@ class MainForm(QMainWindow):
                 teacher_lst.append(item.text())
 
         self.groups, self.teachers = get_pairs(group_lst, teacher_lst)
-        fill_pairs(self.groups, self.teachers, self.day_list)
+        fill_pairs(self.groups, self.teachers, self.day_list,
+                   self.parameters_list)
