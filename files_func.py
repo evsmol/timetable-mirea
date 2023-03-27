@@ -31,7 +31,8 @@ def get_files(url):
                         if "pdf" not in link['href'] and \
                                 "zach" not in link['href'] and \
                                 'ekz' not in link['href']:
-                            files.append(url)
+                            if 'xlsx' in link['href'] or 'xls' in link['href']:
+                                files.append(url)
     return files
 
 
