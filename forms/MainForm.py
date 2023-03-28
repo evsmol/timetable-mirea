@@ -1,3 +1,5 @@
+import datetime
+
 from PyQt6.QtCore import Qt, QSize, QUrl
 from PyQt6.QtWidgets import QMainWindow, QWidget
 from PyQt6.QtWidgets import QGridLayout, QToolBar, \
@@ -254,7 +256,7 @@ class MainForm(QMainWindow):
     def toolbar_button_click_report(self):
         url = f'mailto:smolentsev@kb9-mirea.ru' \
               f'?subject=Ошибка в приложении Учебное расписание РТУ МИРЭА ' \
-              f'(v{VERSION})' \
+              f'(v{VERSION}) {datetime.datetime.now()}' \
               f'&body=Подробно опишите ошибку, приложите скриншоты:'
         QDesktopServices.openUrl(QUrl(url))
 

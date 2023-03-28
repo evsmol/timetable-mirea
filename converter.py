@@ -61,7 +61,8 @@ def get_timetable(file, day_start, date_end):
             if not worksheet_list[row][col].value:
                 continue
 
-            week = 1 if worksheet_list[row][col - 1].value == 'I' else 0
+            week = 1 if worksheet_list[row][col - 1].value == 'I' \
+                        or worksheet_list[row][col - 6].value == 'I' else 0
             discipline = worksheet_list[row][col].value
             activity_type = worksheet_list[row][col + 1].value
             teacher = worksheet_list[row][col + 2].value
