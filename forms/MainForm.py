@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QGridLayout, QToolBar, \
     QLabel, QPushButton, QListWidget, QListWidgetItem
 from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor
 
-from forms import DateForm, FilterForm
+from forms import DateForm, FilterForm, CheckForm
 
 from config import VERSION
 
@@ -53,15 +53,15 @@ class MainForm(QMainWindow):
 
         self.toolbar.addSeparator()
 
-        self.button_action_check = QAction(QIcon('image/check.png'),
-                                           'Проверить загруженное расписание',
-                                           self)
-        self.button_action_check.triggered.connect(
-            self.toolbar_button_click_check
-        )
-        self.toolbar.addAction(self.button_action_check)
-
-        self.toolbar.addSeparator()
+        # self.button_action_check = QAction(QIcon('image/check.png'),
+        #                                    'Проверить загруженное расписание',
+        #                                    self)
+        # self.button_action_check.triggered.connect(
+        #     self.toolbar_button_click_check
+        # )
+        # self.toolbar.addAction(self.button_action_check)
+        #
+        # self.toolbar.addSeparator()
 
         self.button_action_filter = QAction(
             QIcon('image/filter.png'),
@@ -214,8 +214,9 @@ class MainForm(QMainWindow):
         self.date_form = DateForm.DateForm(self)
         self.date_form.show()
 
-    def toolbar_button_click_check(self):
-        pass
+    # def toolbar_button_click_check(self):
+    #     self.check_form = CheckForm.CheckForm(self)
+    #     self.check_form.show()
 
     def toolbar_button_click_filter(self):
         self.filter_form = FilterForm.FilterForm(self)
