@@ -6,7 +6,8 @@ from PyQt6.QtWidgets import QGridLayout, QToolBar, \
     QLabel, QPushButton, QListWidget, QListWidgetItem
 from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor
 
-from forms import DateForm, FilterForm, CheckForm
+from forms import DateForm, FilterForm
+# from forms import CheckForm
 
 from config import VERSION
 
@@ -53,9 +54,11 @@ class MainForm(QMainWindow):
 
         self.toolbar.addSeparator()
 
-        # self.button_action_check = QAction(QIcon('image/check.png'),
-        #                                    'Проверить загруженное расписание',
-        #                                    self)
+        # self.button_action_check = QAction(
+        #     QIcon('image/check.png'),
+        #     'Проверить загруженное расписание',
+        #     self
+        # )
         # self.button_action_check.triggered.connect(
         #     self.toolbar_button_click_check
         # )
@@ -138,7 +141,8 @@ class MainForm(QMainWindow):
             'Номер группы',
             'Номер аудитории',
             'Тип занятия',
-            'Название дисциплины'
+            'Название дисциплины',
+            'Объединить потоки'
         ]
         item = QListWidgetItem('Параметры:')
         item.setBackground(QColor('#4f4f4f'))

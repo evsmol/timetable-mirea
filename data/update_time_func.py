@@ -9,6 +9,8 @@ def get_time():
 
     try:
         return time.update_date, time.start_date, time.finish_date
+    except AttributeError:
+        return
     finally:
         db_sess.close()
 

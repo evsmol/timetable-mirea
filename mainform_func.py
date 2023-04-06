@@ -16,6 +16,7 @@ def fill_dates(day_list, dates):
             item.setBackground(QColor('#926bff'))
         else:
             item.setBackground(QColor('#4f4f4f'))
+        item.__hash__ = 0
         lst_widget.addItem(item)
 
 
@@ -33,7 +34,7 @@ def get_pairs(groups_list, teachers_list):
 
 def fill_pairs(groups_list, teachers_list, dates, parameters):
     parameters_items = [parameters.item(x) for x in range(parameters.count())]
-    # ___, преподаватель, группа, аудитория, тип занятия, дисциплина
+    # ___, преподаватель, группа, аудитория, тип занятия, дисциплина, поток
     parameters_flag = [True
                        if x.checkState() == Qt.CheckState.Checked
                        else False
@@ -62,8 +63,11 @@ def fill_pairs(groups_list, teachers_list, dates, parameters):
             for date in dates_str:
                 if date == pair.date:
                     item = QListWidgetItem('\n'.join(text))
-                    item.setIcon(QIcon(f'image/group{pair.pair_number}.png'))
+                    item.__hash__ = pair.pair_number
+                    icon = QIcon(f'image/group{pair.pair_number}.png')
+                    item.setIcon(icon)
                     item.setFont(QFont('Arial', 10))
+                    item.icon()
                     dates[dates_str.index(pair.date)].addItem(item)
 
     for teacher in teachers_list:
@@ -85,6 +89,39 @@ def fill_pairs(groups_list, teachers_list, dates, parameters):
             for date in dates_str:
                 if date == pair.date:
                     item = QListWidgetItem('\n'.join(text))
-                    item.setIcon(QIcon(f'image/teacher{pair.pair_number}.png'))
+                    item.__hash__ = pair.pair_number
+                    icon = QIcon(f'image/teacher{pair.pair_number}.png')
+                    item.setIcon(icon)
                     item.setFont(QFont('Arial', 10))
                     dates[dates_str.index(pair.date)].addItem(item)
+
+    for date in dates_str:
+        lst = dates[dates_str.index(date)]
+        items = [lst.item(x) for x in range(lst.count())]
+        for _ in range(lst.count()):
+            lst.takeItem(0)
+        items.sort(key=lambda x: x.__hash__)
+
+        if parameters_flag[6]:
+            new_items = []
+            for i, item in enumerate(items):
+                if i == 0:
+                    new_items.append(item)
+                    continue
+                if len(new_items) > 1 and \
+                        item.text().split('\n')[:-1] == \
+                        new_items[-1].text().split('\n')[:-1] and \
+                        item.__hash__ == new_items[-1].__hash__ and \
+                        item.text().split('\n')[-1] != \
+                        new_items[-1].text().split('\n')[-1]:
+                    slash_n = '\n'
+                    new_items[-1].setText(f'{new_items[-1].text()}, '
+                                          f'{item.text().split(slash_n)[-1]}')
+                else:
+                    new_items.append(item)
+            for item in new_items:
+                lst.addItem(item)
+
+        else:
+            for item in items:
+                lst.addItem(item)

@@ -84,4 +84,6 @@ class DateForm(QMainWindow):
         self.main_form.update_dates()
         self.main_form.update_time_download()
 
+        self.main_form.update_lists()
+
         self.close()

@@ -1,7 +1,6 @@
 import sys
-from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication
-from PyQt6.QtGui import QPalette, QColor
+import qdarktheme
 
 from forms.MainForm import MainForm
 from data import db_session
@@ -15,7 +14,7 @@ if __name__ == '__main__':
     db_session.global_init('db/timetable.db')
 
     app = QApplication(sys.argv)
-    # app.setStyle('Fusion')
+    qdarktheme.setup_theme()
 
     form = MainForm()
     form.show()
