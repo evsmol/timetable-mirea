@@ -108,10 +108,22 @@ class MainForm(QMainWindow):
         )
         self.toolbar.addAction(self.button_action_report)
 
+        self.toolbar.addSeparator()
+
+        time = get_time()
+        if time is None:
+            time = '<i>расписание не загружалось</i>'
+        else:
+            time = time[0]
+        self.label_update = QLabel(f'Последняя загрузка расписания: {time}')
+        self.label_update.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.toolbar.addWidget(self.label_update)
+
         # создание виджетов
         self.layout = QGridLayout()
 
         self.groups_list = QListWidget()
+        self.groups_list.itemChanged.connect(self.click_update)
         self.layout.addWidget(self.groups_list, 0, 0, 2, 1)
 
         # загрузка списка групп
@@ -123,6 +135,7 @@ class MainForm(QMainWindow):
                 self.groups_list.addItem(item)
 
         self.teachers_list = QListWidget()
+        self.teachers_list.clicked.connect(self.click_update)
         self.layout.addWidget(self.teachers_list, 2, 0, 2, 1)
 
         # загрузка списка преподавателей
@@ -134,6 +147,7 @@ class MainForm(QMainWindow):
                 self.teachers_list.addItem(item)
 
         self.parameters_list = QListWidget()
+        self.parameters_list.clicked.connect(self.click_update)
         self.layout.addWidget(self.parameters_list, 4, 0, 2, 1)
 
         parameters = [
@@ -151,19 +165,6 @@ class MainForm(QMainWindow):
             item = QListWidgetItem(parameter)
             item.setCheckState(Qt.CheckState.Checked)
             self.parameters_list.addItem(item)
-
-        self.accept_btn = QPushButton('Применить')
-        self.accept_btn.clicked.connect(self.button_click_accept)
-        self.layout.addWidget(self.accept_btn, 6, 0, 1, 1)
-
-        time = get_time()
-        if time is None:
-            time = '<i>расписание не загружалось</i>'
-        else:
-            time = time[0]
-        self.label_update = QLabel(f'Последняя загрузка расписания: {time}')
-        self.label_update.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.layout.addWidget(self.label_update, 6, 1, 1, 6)
 
         self.day_list = [QListWidget() for _ in range(36)]
         counter = 0
@@ -265,7 +266,7 @@ class MainForm(QMainWindow):
               f'&body=Подробно опишите ошибку, приложите скриншоты:'
         QDesktopServices.openUrl(QUrl(url))
 
-    def button_click_accept(self):
+    def click_update(self):
         for lst in self.day_list:
             lst.clear()
 
