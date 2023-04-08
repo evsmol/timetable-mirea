@@ -1,9 +1,9 @@
 import datetime
 
 from PyQt6.QtCore import Qt, QSize, QUrl
-from PyQt6.QtWidgets import QMainWindow, QWidget
+from PyQt6.QtWidgets import QMainWindow, QWidget, QAbstractItemView
 from PyQt6.QtWidgets import QGridLayout, QToolBar, \
-    QLabel, QPushButton, QListWidget, QListWidgetItem
+    QLabel, QListWidget, QListWidgetItem
 from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor
 
 from forms import DateForm, FilterForm
@@ -123,6 +123,9 @@ class MainForm(QMainWindow):
         self.layout = QGridLayout()
 
         self.groups_list = QListWidget()
+        self.groups_list.setSelectionMode(
+            QAbstractItemView.SelectionMode.NoSelection
+        )
         self.groups_list.itemChanged.connect(self.click_update)
         self.layout.addWidget(self.groups_list, 0, 0, 2, 1)
 
@@ -135,6 +138,9 @@ class MainForm(QMainWindow):
                 self.groups_list.addItem(item)
 
         self.teachers_list = QListWidget()
+        self.teachers_list.setSelectionMode(
+            QAbstractItemView.SelectionMode.NoSelection
+        )
         self.teachers_list.clicked.connect(self.click_update)
         self.layout.addWidget(self.teachers_list, 2, 0, 2, 1)
 
@@ -147,6 +153,9 @@ class MainForm(QMainWindow):
                 self.teachers_list.addItem(item)
 
         self.parameters_list = QListWidget()
+        self.parameters_list.setSelectionMode(
+            QAbstractItemView.SelectionMode.NoSelection
+        )
         self.parameters_list.clicked.connect(self.click_update)
         self.layout.addWidget(self.parameters_list, 4, 0, 2, 1)
 
@@ -170,6 +179,9 @@ class MainForm(QMainWindow):
         counter = 0
         for i in range(6):
             for j in range(1, 7):
+                self.day_list[counter].setSelectionMode(
+                    QAbstractItemView.SelectionMode.NoSelection
+                )
                 self.layout.addWidget(self.day_list[counter], i, j)
                 counter += 1
 

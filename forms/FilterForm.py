@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QMainWindow
+from PyQt6.QtWidgets import QWidget, QMainWindow, QAbstractItemView
 from PyQt6.QtWidgets import QGridLayout, QLabel, QPushButton, \
     QListWidget, QListWidgetItem, QLineEdit
 from PyQt6.QtGui import QIcon
@@ -48,9 +48,15 @@ class FilterForm(QMainWindow):
         self.layout.addWidget(self.teacher_search, 2, 1, 1, 1)
 
         self.group_lst = QListWidget()
+        self.group_lst.setSelectionMode(
+            QAbstractItemView.SelectionMode.NoSelection
+        )
         self.layout.addWidget(self.group_lst, 3, 0, 1, 1)
 
         self.teacher_lst = QListWidget()
+        self.teacher_lst.setSelectionMode(
+            QAbstractItemView.SelectionMode.NoSelection
+        )
         self.layout.addWidget(self.teacher_lst, 3, 1, 1, 1)
 
         self.accept_btn = QPushButton('Применить')
