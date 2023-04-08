@@ -27,38 +27,35 @@ class FilterForm(QMainWindow):
                                  'для отображения в главном окне программы.')
         self.layout.addWidget(self.label_info, 0, 0, 1, 2)
 
-        self.label_space = QLabel(' ')
-        self.layout.addWidget(self.label_space, 1, 0, 1, 2)
-
         self.group_btn = QPushButton('Выделить / снять выделение')
         self.group_btn.clicked.connect(self.button_click_selected_group)
-        self.layout.addWidget(self.group_btn, 2, 0, 1, 1)
+        self.layout.addWidget(self.group_btn, 1, 0, 1, 1)
         self.group_flag = 1
 
         self.teacher_btn = QPushButton('Выделить / снять выделение')
         self.teacher_btn.clicked.connect(self.button_click_selected_teacher)
-        self.layout.addWidget(self.teacher_btn, 2, 1, 1, 1)
+        self.layout.addWidget(self.teacher_btn, 1, 1, 1, 1)
         self.teacher_flag = 1
 
         self.group_search = QLineEdit()
         self.group_search.setPlaceholderText('Поиск по группам')
         self.group_search.textChanged.connect(self.text_change_group)
-        self.layout.addWidget(self.group_search, 3, 0, 1, 1)
+        self.layout.addWidget(self.group_search, 2, 0, 1, 1)
 
         self.teacher_search = QLineEdit()
         self.teacher_search.setPlaceholderText('Поиск по преподавателям')
         self.teacher_search.textChanged.connect(self.text_change_teacher)
-        self.layout.addWidget(self.teacher_search, 3, 1, 1, 1)
+        self.layout.addWidget(self.teacher_search, 2, 1, 1, 1)
 
         self.group_lst = QListWidget()
-        self.layout.addWidget(self.group_lst, 4, 0, 1, 1)
+        self.layout.addWidget(self.group_lst, 3, 0, 1, 1)
 
         self.teacher_lst = QListWidget()
-        self.layout.addWidget(self.teacher_lst, 4, 1, 1, 1)
+        self.layout.addWidget(self.teacher_lst, 3, 1, 1, 1)
 
         self.accept_btn = QPushButton('Применить')
         self.accept_btn.clicked.connect(self.button_click_accept)
-        self.layout.addWidget(self.accept_btn, 5, 0, 1, 2)
+        self.layout.addWidget(self.accept_btn, 4, 0, 1, 2)
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)

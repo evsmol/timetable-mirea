@@ -23,7 +23,7 @@ class DateForm(QMainWindow):
     def initUI(self):
         self.setWindowTitle('Загрузка расписания')
         self.setWindowIcon(QIcon('image/download.png'))
-        self.setFixedSize(405, 143)
+        self.setFixedSize(414, 132)
 
         # создание виджетов
         self.layout = QGridLayout()
@@ -33,11 +33,8 @@ class DateForm(QMainWindow):
                                  'дату начала семестра.')
         self.layout.addWidget(self.label_info, 0, 0, 1, 2)
 
-        self.label_space = QLabel(' ')
-        self.layout.addWidget(self.label_space, 1, 0, 1, 2)
-
         self.label_start = QLabel('Введите дату начала семестра:')
-        self.layout.addWidget(self.label_start, 2, 0, 1, 1)
+        self.layout.addWidget(self.label_start, 1, 0, 1, 1)
 
         time_start = datetime.now()
         time = get_time()
@@ -47,11 +44,11 @@ class DateForm(QMainWindow):
         self.date_start = QDateEdit(QDate(time_start.year,
                                           time_start.month,
                                           time_start.day))
-        self.layout.addWidget(self.date_start, 2, 1, 1, 1)
+        self.layout.addWidget(self.date_start, 1, 1, 1, 1)
 
         self.accept_btn = QPushButton('Применить')
         self.accept_btn.clicked.connect(self.button_click_accept)
-        self.layout.addWidget(self.accept_btn, 3, 0, 1, 2)
+        self.layout.addWidget(self.accept_btn, 2, 0, 1, 2)
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
@@ -77,9 +74,6 @@ class DateForm(QMainWindow):
             (datetime.strptime(self.date_start.text(), '%d.%m.%Y')
              + timedelta(112)).strftime('%d.%m.%Y')
         )
-
-        print((datetime.strptime(self.date_start.text(), '%d.%m.%Y')
-               + timedelta(112)).strftime('%d.%m.%Y'))
 
         self.main_form.update_dates()
         self.main_form.update_time_download()
