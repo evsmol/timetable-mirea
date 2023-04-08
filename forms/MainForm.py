@@ -112,7 +112,7 @@ class MainForm(QMainWindow):
 
         time = get_time()
         if time is None:
-            time = '<i>расписание не загружалось</i>'
+            time = '<i>загрузите расписание</i>'
         else:
             time = time[0]
         self.label_update = QLabel(f'Последняя загрузка расписания: {time}')
