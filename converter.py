@@ -36,6 +36,9 @@ def get_timetable(file, day_start, date_end):
         if cell is None or len(str(cell)) != 10 or len(cell.split('-')) != 3:
             continue
 
+        if cell.split('-')[0][2] == 'А':
+            return []
+
         # получение расписания
         pair_number = None
         week_day = None
