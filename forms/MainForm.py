@@ -225,7 +225,8 @@ class MainForm(QMainWindow):
         self.label_update.setText(f'Последняя загрузка расписания: {time}')
 
     def toolbar_button_click_info(self):
-        pass
+        url = 'https://github.com/evsmol/timetable/releases'
+        QDesktopServices.openUrl(QUrl(url))
 
     def toolbar_button_click_download(self):
         self.date_form = DateForm.DateForm(self)
