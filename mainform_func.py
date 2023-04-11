@@ -34,7 +34,7 @@ def get_pairs(groups_list, teachers_list):
 
 def fill_pairs(groups_list, teachers_list, dates, parameters):
     parameters_items = [parameters.item(x) for x in range(parameters.count())]
-    # ___, преподаватель, группа, аудитория, тип занятия, дисциплина, поток
+    # __, преподаватель, группа, аудитория, тип занятия, дисциплина, поток, __
     parameters_flag = [True
                        if x.checkState() == Qt.CheckState.Checked
                        else False
@@ -95,6 +95,8 @@ def fill_pairs(groups_list, teachers_list, dates, parameters):
                     item.setFont(QFont('Arial', 10))
                     dates[dates_str.index(pair.date)].addItem(item)
 
+    filters = parameters_items[7].text()
+
     for date in dates_str:
         lst = dates[dates_str.index(date)]
         items = [lst.item(x) for x in range(lst.count())]
@@ -119,9 +121,23 @@ def fill_pairs(groups_list, teachers_list, dates, parameters):
                                           f'{item.text().split(slash_n)[-1]}')
                 else:
                     new_items.append(item)
-            for item in new_items:
-                lst.addItem(item)
+            for i, item in enumerate(new_items):
+                if i == 0:
+                    lst.addItem(item)
+                    continue
+                if filters == '' or \
+                        filters == \
+                        'Фильтр (нажмите трижды)' or \
+                        any(ext in item.text() for ext in filters.split(',')):
+                    lst.addItem(item)
 
         else:
-            for item in items:
-                lst.addItem(item)
+            for i, item in enumerate(items):
+                if i == 0:
+                    lst.addItem(item)
+                    continue
+                if filters == '' or \
+                        filters == \
+                        'Фильтр (нажмите трижды)' or \
+                        any(ext in item.text() for ext in filters.split(',')):
+                    lst.addItem(item)

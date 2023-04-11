@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt, QSize, QUrl
 from PyQt6.QtWidgets import QMainWindow, QWidget, QAbstractItemView
 from PyQt6.QtWidgets import QGridLayout, QToolBar, \
     QLabel, QListWidget, QListWidgetItem
-from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor
+from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor, QFont
 
 from forms import DateForm, FilterForm
 # from forms import CheckForm
@@ -157,6 +157,7 @@ class MainForm(QMainWindow):
             QAbstractItemView.SelectionMode.NoSelection
         )
         self.parameters_list.clicked.connect(self.click_update)
+        self.parameters_list.itemChanged.connect(self.click_update)
         self.layout.addWidget(self.parameters_list, 4, 0, 2, 1)
 
         parameters = [
@@ -174,6 +175,15 @@ class MainForm(QMainWindow):
             item = QListWidgetItem(parameter)
             item.setCheckState(Qt.CheckState.Checked)
             self.parameters_list.addItem(item)
+
+        item = QListWidgetItem('Фильтр (нажмите трижды)')
+
+        item.setIcon(QIcon('image/filters.png'))
+        item.setFont(QFont('Arial', 12, italic=True))
+        item.setFlags(Qt.ItemFlag.ItemIsEnabled |
+                      Qt.ItemFlag.ItemIsSelectable |
+                      Qt.ItemFlag.ItemIsEditable)
+        self.parameters_list.addItem(item)
 
         self.day_list = [QListWidget() for _ in range(36)]
         counter = 0
