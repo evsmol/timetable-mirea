@@ -47,19 +47,18 @@ def get_timetable(file, day_start, date_end):
                 pair_number = int(worksheet_list[row][1].value)
 
             if worksheet_list[row][0].value:
-                match worksheet_list[row][0].value:
-                    case 'ПОНЕДЕЛЬНИК':
-                        week_day = 1
-                    case 'ВТОРНИК':
-                        week_day = 2
-                    case 'СРЕДА':
-                        week_day = 3
-                    case 'ЧЕТВЕРГ':
-                        week_day = 4
-                    case 'ПЯТНИЦА':
-                        week_day = 5
-                    case 'СУББОТА':
-                        week_day = 6
+                if worksheet_list[row][0].value == 'ПОНЕДЕЛЬНИК':
+                    week_day = 1
+                elif worksheet_list[row][0].value == 'ВТОРНИК':
+                    week_day = 2
+                elif worksheet_list[row][0].value == 'СРЕДА':
+                    week_day = 3
+                elif worksheet_list[row][0].value == 'ЧЕТВЕРГ':
+                    week_day = 4
+                elif worksheet_list[row][0].value == 'ПЯТНИЦА':
+                    week_day = 5
+                elif worksheet_list[row][0].value == 'СУББОТА':
+                    week_day = 6
 
             if not worksheet_list[row][col].value:
                 continue
