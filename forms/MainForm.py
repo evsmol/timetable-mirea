@@ -226,6 +226,8 @@ class MainForm(QMainWindow):
         # загрузка списка преподавателей
         teachers = load_teacher()
         for teacher in teachers:
+            if teacher.teacher == '':
+                continue
             if teacher.selected:
                 item = QListWidgetItem(teacher.teacher)
                 item.setCheckState(Qt.CheckState.Unchecked)
