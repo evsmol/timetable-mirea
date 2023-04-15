@@ -147,6 +147,8 @@ class MainForm(QMainWindow):
         # загрузка списка преподавателей
         teachers = load_teacher()
         for teacher in teachers:
+            if teacher.teacher == '':
+                continue
             if teacher.selected:
                 item = QListWidgetItem(teacher.teacher)
                 item.setCheckState(Qt.CheckState.Unchecked)
@@ -176,14 +178,15 @@ class MainForm(QMainWindow):
             item.setCheckState(Qt.CheckState.Checked)
             self.parameters_list.addItem(item)
 
-        item = QListWidgetItem('Фильтр (нажмите трижды)')
-
-        item.setIcon(QIcon('image/filters.png'))
-        item.setFont(QFont('Arial', 12, italic=True))
-        item.setFlags(Qt.ItemFlag.ItemIsEnabled |
-                      Qt.ItemFlag.ItemIsSelectable |
-                      Qt.ItemFlag.ItemIsEditable)
-        self.parameters_list.addItem(item)
+        # фильтр
+        # item = QListWidgetItem('Фильтр (нажмите трижды)')
+        #
+        # item.setIcon(QIcon('image/filters.png'))
+        # item.setFont(QFont('Arial', 12, italic=True))
+        # item.setFlags(Qt.ItemFlag.ItemIsEnabled |
+        #               Qt.ItemFlag.ItemIsSelectable |
+        #               Qt.ItemFlag.ItemIsEditable)
+        # self.parameters_list.addItem(item)
 
         self.day_list = [QListWidget() for _ in range(36)]
         counter = 0
@@ -202,6 +205,8 @@ class MainForm(QMainWindow):
         # заполнение дат
         dates = set_now_month()
         fill_dates(self.day_list, dates)
+
+        self.groups, self.teachers = [], []
 
     def update_dates(self):
         dates = set_now_month()
@@ -308,6 +313,8 @@ class MainForm(QMainWindow):
                          for x in range(self.teachers_list.count())]
         teacher_lst = []
         for item in teacher_items:
+            if item.text() == '':
+                continue
             if item.checkState() == Qt.CheckState.Checked:
                 teacher_lst.append(item.text())
 

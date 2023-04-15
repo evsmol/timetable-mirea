@@ -85,6 +85,8 @@ class FilterForm(QMainWindow):
         # загрузка списка преподавателей
         teachers = load_teacher()
         for teacher in teachers:
+            if teacher.teacher == '':
+                continue
             item = QListWidgetItem(teacher.teacher)
             if teacher.selected:
                 item.setCheckState(Qt.CheckState.Checked)

@@ -6,3 +6,7 @@
 
 \db
 \files
+
+\dist
+\build
+setup.py

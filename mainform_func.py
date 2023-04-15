@@ -95,7 +95,10 @@ def fill_pairs(groups_list, teachers_list, dates, parameters):
                     item.setFont(QFont('Arial', 10))
                     dates[dates_str.index(pair.date)].addItem(item)
 
-    filters = parameters_items[7].text()
+    try:
+        filters = parameters_items[7].text()
+    except IndexError:
+        filters = ''
 
     for date in dates_str:
         lst = dates[dates_str.index(date)]
