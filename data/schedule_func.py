@@ -65,3 +65,16 @@ def get_teacher_pairs(teacher):
         return teacher_pairs
     finally:
         db_sess.close()
+
+
+def get_auditorium_pairs(auditorium):
+    db_sess = db_session.create_session()
+
+    auditorium_pairs = db_sess.query(Schedule).filter(
+        Schedule.auditorium == auditorium
+    ).order_by(Schedule.pair_number).all()
+
+    try:
+        return auditorium_pairs
+    finally:
+        db_sess.close()

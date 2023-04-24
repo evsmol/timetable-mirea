@@ -3,8 +3,8 @@ import sqlalchemy
 from data.db_session import SqlAlchemyBase
 
 
-class Teacher(SqlAlchemyBase):
-    __tablename__ = 'teacher'
+class Auditorium(SqlAlchemyBase):
+    __tablename__ = 'auditorium'
 
     id = sqlalchemy.Column(
         sqlalchemy.INTEGER,
@@ -12,7 +12,7 @@ class Teacher(SqlAlchemyBase):
         autoincrement=True
     )
 
-    teacher = sqlalchemy.Column(
+    auditorium = sqlalchemy.Column(
         sqlalchemy.TEXT
     )
 

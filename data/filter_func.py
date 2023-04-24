@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt
 from data import db_session
 from data.models.group import Group
 from data.models.teacher import Teacher
+from data.models.auditorium import Auditorium
 from data.models.schedule import Schedule
 
 
@@ -24,6 +25,17 @@ def load_teacher():
 
     try:
         return teachers
+    finally:
+        db_sess.close()
+
+
+def load_auditorium():
+    db_sess = db_session.create_session()
+
+    auditoriums = db_sess.query(Auditorium).all()
+
+    try:
+        return auditoriums
     finally:
         db_sess.close()
 
@@ -73,6 +85,28 @@ def update_teacher():
         db_sess.close()
 
 
+def update_auditorium():
+    db_sess = db_session.create_session()
+
+    if db_sess.query(Auditorium).first():
+        db_sess.query(Auditorium).delete()
+
+    auditoriums = db_sess.query(Schedule).all()
+
+    auditoriums_list = sorted(list(set([x.auditorium for x in auditoriums])))
+
+    objects = [Auditorium(auditorium=x, selected=True)
+               for x in auditoriums_list]
+    db_sess.bulk_save_objects(objects)
+
+    db_sess.commit()
+
+    try:
+        return objects
+    finally:
+        db_sess.close()
+
+
 def change_group(items):
     db_sess = db_session.create_session()
 
@@ -110,6 +144,28 @@ def change_teacher(items):
             teacher.selected = False
 
         db_sess.add(teacher)
+
+    db_sess.commit()
+
+    try:
+        return
+    finally:
+        db_sess.close()
+
+
+def change_auditorium(items):
+    db_sess = db_session.create_session()
+
+    for item in items:
+        auditorium = db_sess.query(Auditorium).filter(
+            Auditorium.auditorium == item.text()
+        ).first()
+        if item.checkState() == Qt.CheckState.Checked:
+            auditorium.selected = True
+        else:
+            auditorium.selected = False
+
+        db_sess.add(auditorium)
 
     db_sess.commit()
 

@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt, QSize, QUrl
 from PyQt6.QtWidgets import QMainWindow, QWidget, QAbstractItemView
 from PyQt6.QtWidgets import QGridLayout, QToolBar, \
     QLabel, QListWidget, QListWidgetItem
-from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor, QFont
+from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor
 
 from forms import DateForm, FilterForm
 # from forms import CheckForm
@@ -12,7 +12,7 @@ from forms import DateForm, FilterForm
 from config import VERSION
 
 from data.update_time_func import get_time
-from data.filter_func import load_group, load_teacher
+from data.filter_func import load_group, load_teacher, load_auditorium
 
 from mainform_func import fill_dates, get_pairs, fill_pairs
 
@@ -154,13 +154,30 @@ class MainForm(QMainWindow):
                 item.setCheckState(Qt.CheckState.Unchecked)
                 self.teachers_list.addItem(item)
 
+        self.auditoriums_list = QListWidget()
+        self.auditoriums_list.setSelectionMode(
+            QAbstractItemView.SelectionMode.NoSelection
+        )
+        self.auditoriums_list.clicked.connect(self.click_update)
+        self.layout.addWidget(self.auditoriums_list, 4, 0, 1, 1)
+
+        # загрузка списка аудиторий
+        auditoriums = load_auditorium()
+        for auditorium in auditoriums:
+            if auditorium.auditorium == '':
+                continue
+            if auditorium.selected:
+                item = QListWidgetItem(auditorium.auditorium)
+                item.setCheckState(Qt.CheckState.Unchecked)
+                self.auditoriums_list.addItem(item)
+
         self.parameters_list = QListWidget()
         self.parameters_list.setSelectionMode(
             QAbstractItemView.SelectionMode.NoSelection
         )
         self.parameters_list.clicked.connect(self.click_update)
         self.parameters_list.itemChanged.connect(self.click_update)
-        self.layout.addWidget(self.parameters_list, 4, 0, 2, 1)
+        self.layout.addWidget(self.parameters_list, 5, 0, 1, 1)
 
         parameters = [
             'ФИО преподавателя',
@@ -206,7 +223,7 @@ class MainForm(QMainWindow):
         dates = set_now_month()
         fill_dates(self.day_list, dates)
 
-        self.groups, self.teachers = [], []
+        self.groups, self.teachers, self.auditoriums = [], [], []
 
     def update_dates(self):
         dates = set_now_month()
@@ -232,6 +249,17 @@ class MainForm(QMainWindow):
                 item = QListWidgetItem(teacher.teacher)
                 item.setCheckState(Qt.CheckState.Unchecked)
                 self.teachers_list.addItem(item)
+
+        self.auditoriums_list.clear()
+        # загрузка списка аудиторий
+        auditoriums = load_auditorium()
+        for auditorium in auditoriums:
+            if auditorium.auditorium == '':
+                continue
+            if auditorium.selected:
+                item = QListWidgetItem(auditorium.auditorium)
+                item.setCheckState(Qt.CheckState.Unchecked)
+                self.auditoriums_list.addItem(item)
 
     def update_time_download(self):
         time = get_time()
@@ -266,16 +294,16 @@ class MainForm(QMainWindow):
         dates = set_previous_month(date)
         fill_dates(self.day_list, dates)
 
-        fill_pairs(self.groups, self.teachers, self.day_list,
-                   self.parameters_list)
+        fill_pairs(self.groups, self.teachers, self.auditoriums,
+                   self.day_list, self.parameters_list)
 
     def toolbar_button_click_now(self):
         # заполнение дат
         dates = set_now_month()
         fill_dates(self.day_list, dates)
 
-        fill_pairs(self.groups, self.teachers, self.day_list,
-                   self.parameters_list)
+        fill_pairs(self.groups, self.teachers, self.auditoriums,
+                   self.day_list, self.parameters_list)
 
     def toolbar_button_click_right(self):
         date = self.day_list[6].item(0).text()
@@ -286,8 +314,8 @@ class MainForm(QMainWindow):
         dates = set_next_month(date)
         fill_dates(self.day_list, dates)
 
-        fill_pairs(self.groups, self.teachers, self.day_list,
-                   self.parameters_list)
+        fill_pairs(self.groups, self.teachers, self.auditoriums,
+                   self.day_list, self.parameters_list)
 
     def toolbar_button_click_report(self):
         url = f'mailto:smolentsev@kb9-mirea.ru' \
@@ -320,6 +348,16 @@ class MainForm(QMainWindow):
             if item.checkState() == Qt.CheckState.Checked:
                 teacher_lst.append(item.text())
 
-        self.groups, self.teachers = get_pairs(group_lst, teacher_lst)
-        fill_pairs(self.groups, self.teachers, self.day_list,
-                   self.parameters_list)
+        auditorium_items = [self.auditoriums_list.item(x)
+                            for x in range(self.auditoriums_list.count())]
+        auditorium_lst = []
+        for item in auditorium_items:
+            if item.text() == '':
+                continue
+            if item.checkState() == Qt.CheckState.Checked:
+                auditorium_lst.append(item.text())
+
+        self.groups, self.teachers, self.auditoriums = \
+            get_pairs(group_lst, teacher_lst, auditorium_lst)
+        fill_pairs(self.groups, self.teachers, self.auditoriums,
+                   self.day_list, self.parameters_list)
