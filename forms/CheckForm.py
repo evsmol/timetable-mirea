@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from PyQt6.QtWidgets import QMainWindow
-from PyQt6.QtWidgets import QTabWidget, QTableWidget
-from PyQt6.QtGui import QIcon
+from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QTabWidget, QTableWidget
+from PySide6.QtGui import QIcon
 
 from logging_func import logging
 

@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QMainWindow, QAbstractItemView
-from PyQt6.QtWidgets import QGridLayout, QLabel, QPushButton, \
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QMainWindow, QAbstractItemView
+from PySide6.QtWidgets import QGridLayout, QLabel, QPushButton, \
     QListWidget, QListWidgetItem, QLineEdit
-from PyQt6.QtGui import QIcon
+from PySide6.QtGui import QIcon
 
 from data.filter_func import load_teacher, load_group, load_auditorium, \
     change_teacher, change_group, change_auditorium

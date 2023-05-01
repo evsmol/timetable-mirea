@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
-from PyQt6.QtCore import QDate
-from PyQt6.QtWidgets import QWidget, QMainWindow
-from PyQt6.QtWidgets import QGridLayout, QLabel, QPushButton, QDateEdit, QMessageBox
-from PyQt6.QtGui import QIcon
+from PySide6.QtCore import QDate
+from PySide6.QtWidgets import QWidget, QMainWindow
+from PySide6.QtWidgets import QGridLayout, QLabel, QPushButton, QDateEdit, QMessageBox
+from PySide6.QtGui import QIcon
 
 from data.update_time_func import get_time, set_time
 from data.filter_func import update_teacher, update_group, update_auditorium, \

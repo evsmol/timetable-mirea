@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from PyQt6.QtCore import Qt
+from PySide6.QtCore import Qt
 
 from data import db_session
 from data.models.group import Group

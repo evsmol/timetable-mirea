@@ -1,6 +1,6 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QListWidgetItem
-from PyQt6.QtGui import QColor, QIcon, QFont
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QListWidgetItem
+from PySide6.QtGui import QColor, QIcon, QFont
 
 from datetime import datetime
 

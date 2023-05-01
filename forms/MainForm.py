@@ -1,10 +1,10 @@
 import datetime
 
-from PyQt6.QtCore import Qt, QSize, QUrl
-from PyQt6.QtWidgets import QMainWindow, QWidget, QAbstractItemView
-from PyQt6.QtWidgets import QGridLayout, QToolBar, \
+from PySide6.QtCore import Qt, QSize, QUrl
+from PySide6.QtWidgets import QMainWindow, QWidget, QAbstractItemView
+from PySide6.QtWidgets import QGridLayout, QToolBar, \
     QLabel, QListWidget, QListWidgetItem
-from PyQt6.QtGui import QAction, QIcon, QDesktopServices, QColor
+from PySide6.QtGui import QAction, QIcon, QDesktopServices, QColor
 
 from forms import DateForm, FilterForm
 # from forms import CheckForm

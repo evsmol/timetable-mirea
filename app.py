@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 import sqlite3
 
-from PyQt6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 import qdarktheme
 
 from forms.MainForm import MainForm
