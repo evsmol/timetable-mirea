@@ -6,6 +6,7 @@ from data.update_time_func import get_time
 
 
 def get_list_dates(dates):
+    # получение списка дат
     dates = list(filter(lambda x: x[-1] != '0', dates))
 
     time = get_time()
@@ -13,6 +14,7 @@ def get_list_dates(dates):
         dates = [x.split()[0] for x in dates]
         return dates
 
+    # добавление номера недели
     first_week = int(datetime.strptime(time[1], '%d.%m.%Y').strftime('%W'))
     dates = [x.split()[0] + f', {(int(x.split()[1]) - first_week + 1) % 52} н.'
              for x in dates]
@@ -20,6 +22,7 @@ def get_list_dates(dates):
 
 
 def set_now_month():
+    # установка дат текущего месяца
     first_date = datetime.today().replace(day=1)
 
     start_date = first_date - timedelta(days=first_date.weekday())
@@ -34,6 +37,7 @@ def set_now_month():
 
 
 def set_previous_month(date):
+    # установка дат предыдущего месяца
     now_day = datetime.strptime(date.split(',')[0], '%d.%m.%Y')
     last_day = now_day - timedelta(days=20)
 
@@ -51,6 +55,7 @@ def set_previous_month(date):
 
 
 def set_next_month(date):
+    # установка дат следующего месяца
     now_day = datetime.strptime(date.split(',')[0], '%d.%m.%Y')
     next_day = now_day + timedelta(days=35)
 

@@ -18,6 +18,8 @@ from mainform_func import fill_dates, get_pairs, fill_pairs
 
 from calendar_func import set_now_month, set_previous_month, set_next_month
 
+from logging_func import logging
+
 
 class MainForm(QMainWindow):
     """Класс основного окна программы."""
@@ -27,6 +29,9 @@ class MainForm(QMainWindow):
         self.initUI()
 
     def initUI(self):
+        logging(datetime.datetime.now(), 'WARNING', 'Открытие формы '
+                                                    'основного окна программы')
+
         self.setWindowTitle(f'Учебное расписание РТУ МИРЭА (v{VERSION})')
         self.setWindowIcon(QIcon('image/icon.png'))
 
@@ -36,6 +41,7 @@ class MainForm(QMainWindow):
         self.toolbar.setMovable(False)
         self.addToolBar(self.toolbar)
 
+        # добавление кнопки информации
         self.button_action_info = QAction(QIcon('image/info.png'),
                                           'Информация', self)
         self.button_action_info.triggered.connect(
@@ -45,6 +51,7 @@ class MainForm(QMainWindow):
 
         self.toolbar.addSeparator()
 
+        # добавление кнопки загрузки расписания
         self.button_action_download = QAction(QIcon('image/download.png'),
                                               'Загрузить расписание', self)
         self.button_action_download.triggered.connect(
@@ -54,6 +61,7 @@ class MainForm(QMainWindow):
 
         self.toolbar.addSeparator()
 
+        # добавление кнопки проверки загруженного расписания
         # self.button_action_check = QAction(
         #     QIcon('image/check.png'),
         #     'Проверить загруженное расписание',
@@ -66,6 +74,7 @@ class MainForm(QMainWindow):
         #
         # self.toolbar.addSeparator()
 
+        # добавление кнопки фильтра
         self.button_action_filter = QAction(
             QIcon('image/filter.png'),
             'Избранные группы и преподаватели',
@@ -78,6 +87,7 @@ class MainForm(QMainWindow):
 
         self.toolbar.addSeparator()
 
+        # добавление кнопки предыдущего месяца
         self.button_action_left = QAction(QIcon('image/left.png'),
                                           'Предыдущий месяц', self)
         self.button_action_left.triggered.connect(
@@ -85,6 +95,7 @@ class MainForm(QMainWindow):
         )
         self.toolbar.addAction(self.button_action_left)
 
+        # добавление кнопки текущего месяца
         self.button_action_now = QAction(QIcon('image/now.png'),
                                          'Текущий месяц', self)
         self.button_action_now.triggered.connect(
@@ -92,6 +103,7 @@ class MainForm(QMainWindow):
         )
         self.toolbar.addAction(self.button_action_now)
 
+        # добавление кнопки следующего месяца
         self.button_action_right = QAction(QIcon('image/right.png'),
                                            'Следующий месяц', self)
         self.button_action_right.triggered.connect(
@@ -101,6 +113,7 @@ class MainForm(QMainWindow):
 
         self.toolbar.addSeparator()
 
+        # добавление кнопки сообщения об ошибке
         self.button_action_report = QAction(QIcon('image/report.png'),
                                             'Сообщить об ошибке', self)
         self.button_action_report.triggered.connect(
@@ -110,11 +123,14 @@ class MainForm(QMainWindow):
 
         self.toolbar.addSeparator()
 
+        # получение текста о времени загрузки расписания
         time = get_time()
         if time is None:
             time = '<i>загрузите расписание</i>'
         else:
             time = time[0]
+
+        # добавление текста о последней загрузке расписания
         self.label_update = QLabel(f'Последняя загрузка расписания: {time}')
         self.label_update.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.toolbar.addWidget(self.label_update)
@@ -122,11 +138,13 @@ class MainForm(QMainWindow):
         # создание виджетов
         self.layout = QGridLayout()
 
+        # добавление списка групп
         self.groups_list = QListWidget()
         self.groups_list.setSelectionMode(
             QAbstractItemView.SelectionMode.NoSelection
         )
         self.groups_list.itemChanged.connect(self.click_update)
+        self.groups_list.itemDoubleClicked.connect(self.double_click)
         self.layout.addWidget(self.groups_list, 0, 0, 2, 1)
 
         # загрузка списка групп
@@ -137,11 +155,13 @@ class MainForm(QMainWindow):
                 item.setCheckState(Qt.CheckState.Unchecked)
                 self.groups_list.addItem(item)
 
+        # добавление списка преподавателей
         self.teachers_list = QListWidget()
         self.teachers_list.setSelectionMode(
             QAbstractItemView.SelectionMode.NoSelection
         )
-        self.teachers_list.clicked.connect(self.click_update)
+        self.teachers_list.itemChanged.connect(self.click_update)
+        self.teachers_list.itemDoubleClicked.connect(self.double_click)
         self.layout.addWidget(self.teachers_list, 2, 0, 2, 1)
 
         # загрузка списка преподавателей
@@ -154,11 +174,13 @@ class MainForm(QMainWindow):
                 item.setCheckState(Qt.CheckState.Unchecked)
                 self.teachers_list.addItem(item)
 
+        # добавление списка аудиторий
         self.auditoriums_list = QListWidget()
         self.auditoriums_list.setSelectionMode(
             QAbstractItemView.SelectionMode.NoSelection
         )
-        self.auditoriums_list.clicked.connect(self.click_update)
+        self.auditoriums_list.itemChanged.connect(self.click_update)
+        self.auditoriums_list.itemDoubleClicked.connect(self.double_click)
         self.layout.addWidget(self.auditoriums_list, 4, 0, 1, 1)
 
         # загрузка списка аудиторий
@@ -171,12 +193,13 @@ class MainForm(QMainWindow):
                 item.setCheckState(Qt.CheckState.Unchecked)
                 self.auditoriums_list.addItem(item)
 
+        # добавление списка параметров
         self.parameters_list = QListWidget()
         self.parameters_list.setSelectionMode(
             QAbstractItemView.SelectionMode.NoSelection
         )
-        self.parameters_list.clicked.connect(self.click_update)
         self.parameters_list.itemChanged.connect(self.click_update)
+        self.parameters_list.itemDoubleClicked.connect(self.double_click)
         self.layout.addWidget(self.parameters_list, 5, 0, 1, 1)
 
         parameters = [
@@ -205,6 +228,7 @@ class MainForm(QMainWindow):
         #               Qt.ItemFlag.ItemIsEditable)
         # self.parameters_list.addItem(item)
 
+        # добавление списков дней
         self.day_list = [QListWidget() for _ in range(36)]
         counter = 0
         for i in range(6):
@@ -226,10 +250,13 @@ class MainForm(QMainWindow):
         self.groups, self.teachers, self.auditoriums = [], [], []
 
     def update_dates(self):
+        # заполнение дат
         dates = set_now_month()
         fill_dates(self.day_list, dates)
 
     def update_lists(self):
+        # обновление списков
+
         self.groups_list.clear()
         # загрузка списка групп
         groups = load_group()
@@ -262,6 +289,7 @@ class MainForm(QMainWindow):
                 self.auditoriums_list.addItem(item)
 
     def update_time_download(self):
+        # обновление даты загрузки расписания
         time = get_time()
         if time is None:
             time = '<i>расписание не загружалось</i>'
@@ -270,54 +298,74 @@ class MainForm(QMainWindow):
         self.label_update.setText(f'Последняя загрузка расписания: {time}')
 
     def toolbar_button_click_info(self):
+        logging(datetime.datetime.now(), 'WARNING',
+                'Переход на страницу релизов')
+
+        # переход на страницу релизов программы
         url = 'https://github.com/evsmol/timetable/releases'
         QDesktopServices.openUrl(QUrl(url))
 
     def toolbar_button_click_download(self):
+        # открытие формы загрузки расписания
         self.date_form = DateForm.DateForm(self)
         self.date_form.show()
 
     # def toolbar_button_click_check(self):
+    # # открытие формы проверки расписания
     #     self.check_form = CheckForm.CheckForm(self)
     #     self.check_form.show()
 
     def toolbar_button_click_filter(self):
+        # открытие формы выбора избранных
         self.filter_form = FilterForm.FilterForm(self)
         self.filter_form.show()
 
     def toolbar_button_click_left(self):
+        logging(datetime.datetime.now(), 'INFO', 'Выбор предыдущего месяца')
+
+        # получение даты текущего месяца
         date = self.day_list[6].item(0).text()
+
+        # очистка дат
         for lst in self.day_list:
             lst.clear()
 
         # заполнение дат
         dates = set_previous_month(date)
         fill_dates(self.day_list, dates)
-
         fill_pairs(self.groups, self.teachers, self.auditoriums,
                    self.day_list, self.parameters_list)
 
     def toolbar_button_click_now(self):
+        logging(datetime.datetime.now(), 'INFO', 'Выбор текущего месяца')
+
         # заполнение дат
         dates = set_now_month()
         fill_dates(self.day_list, dates)
-
         fill_pairs(self.groups, self.teachers, self.auditoriums,
                    self.day_list, self.parameters_list)
 
     def toolbar_button_click_right(self):
+        logging(datetime.datetime.now(), 'INFO', 'Выбор следующего месяца')
+
+        # получение даты текущего месяца
         date = self.day_list[6].item(0).text()
+
+        # очистка дат
         for lst in self.day_list:
             lst.clear()
 
         # заполнение дат
         dates = set_next_month(date)
         fill_dates(self.day_list, dates)
-
         fill_pairs(self.groups, self.teachers, self.auditoriums,
                    self.day_list, self.parameters_list)
 
     def toolbar_button_click_report(self):
+        logging(datetime.datetime.now(), 'WARNING',
+                'Открытие письма сообщения об ошибке')
+
+        # переход к стандартному почтовому клиенту, встраивание шаблона письма
         url = f'mailto:smolentsev@kb9-mirea.ru' \
               f'?subject=Ошибка в приложении Учебное расписание РТУ МИРЭА ' \
               f'(v{VERSION}) {datetime.datetime.now()}' \
@@ -325,6 +373,9 @@ class MainForm(QMainWindow):
         QDesktopServices.openUrl(QUrl(url))
 
     def click_update(self):
+        # обновление выбираемых данных
+
+        # очистка дат
         for lst in self.day_list:
             lst.clear()
 
@@ -332,6 +383,7 @@ class MainForm(QMainWindow):
         dates = set_now_month()
         fill_dates(self.day_list, dates)
 
+        # получение выбранных групп
         group_items = [self.groups_list.item(x)
                        for x in range(self.groups_list.count())]
         group_lst = []
@@ -339,6 +391,7 @@ class MainForm(QMainWindow):
             if item.checkState() == Qt.CheckState.Checked:
                 group_lst.append(item.text())
 
+        # получение выбранных преподавателей
         teacher_items = [self.teachers_list.item(x)
                          for x in range(self.teachers_list.count())]
         teacher_lst = []
@@ -348,6 +401,7 @@ class MainForm(QMainWindow):
             if item.checkState() == Qt.CheckState.Checked:
                 teacher_lst.append(item.text())
 
+        # получение выбранных аудиторий
         auditorium_items = [self.auditoriums_list.item(x)
                             for x in range(self.auditoriums_list.count())]
         auditorium_lst = []
@@ -357,7 +411,35 @@ class MainForm(QMainWindow):
             if item.checkState() == Qt.CheckState.Checked:
                 auditorium_lst.append(item.text())
 
+        # заполнение пар
         self.groups, self.teachers, self.auditoriums = \
             get_pairs(group_lst, teacher_lst, auditorium_lst)
         fill_pairs(self.groups, self.teachers, self.auditoriums,
                    self.day_list, self.parameters_list)
+
+        p_logging = []
+        for x in range(1, self.parameters_list.count()):
+            if str(
+                    self.parameters_list.item(x).checkState()
+            ).split('.')[1][:2] == 'Ch':
+                p_logging.append(self.parameters_list.item(x).text())
+        if len(p_logging) == 6:
+            p_logging.clear()
+            p_logging.append('Выбраны все параметры')
+        logging(datetime.datetime.now(), 'INFO_F',
+                f'Выбор отображения: группы {group_lst}; '
+                f'преподаватели {teacher_lst}; аудитории {auditorium_lst}; '
+                f'параметры {p_logging}')
+
+    def double_click(self, item):
+        # изменение состояние на противоположное
+        if item.text() == 'Параметры:':
+            pass
+        elif item.checkState() == Qt.CheckState.Checked:
+            item.setCheckState(Qt.CheckState.Unchecked)
+        elif item.checkState() == Qt.CheckState.Unchecked:
+            item.setCheckState(Qt.CheckState.Checked)
+
+    def closeEvent(self, event):
+        logging(datetime.datetime.now(), 'WARNING', 'Закрытие формы '
+                                                    'основного окна программы')

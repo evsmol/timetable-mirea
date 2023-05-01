@@ -4,6 +4,8 @@ from data.db_session import SqlAlchemyBase
 
 
 class Schedule(SqlAlchemyBase):
+    """Таблица всеобщего расписания"""
+
     __tablename__ = 'schedule'
 
     id = sqlalchemy.Column(

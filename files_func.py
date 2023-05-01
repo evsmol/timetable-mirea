@@ -11,6 +11,7 @@ from converter import get_timetable
 
 
 def get_files(url):
+    # получение файлов расписания со страницы
     page = requests.get(url)
 
     soup = BeautifulSoup(page.text, "html.parser")
@@ -37,12 +38,14 @@ def get_files(url):
 
 
 def load_file(file, filename):
+    # загрузка файла со страницы
     r = requests.head(file)
     if r.status_code == 200:
         request.urlretrieve(file, filename)
 
 
 def load_files(files):
+    # получение файлов и их адреса
     filenames = list()
     ssl._create_default_https_context = ssl._create_unverified_context
     for file in files:
@@ -52,6 +55,7 @@ def load_files(files):
 
 
 def update_db(day_start, day_end):
+    # обновление базы данных из загруженных файлов
     clear_table()
     for file in load_files(get_files('https://www.mirea.ru/schedule/')):
         add_pairs(get_timetable(file, day_start, day_end))

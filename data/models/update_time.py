@@ -4,6 +4,8 @@ from data.db_session import SqlAlchemyBase
 
 
 class UpdateTime(SqlAlchemyBase):
+    """Таблица учёта даты обновления расписания и границ семестра"""
+
     __tablename__ = 'update_time'
 
     id = sqlalchemy.Column(

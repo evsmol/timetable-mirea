@@ -4,6 +4,8 @@ from data.db_session import SqlAlchemyBase
 
 
 class Auditorium(SqlAlchemyBase):
+    """Таблица избранных аудиторий"""
+
     __tablename__ = 'auditorium'
 
     id = sqlalchemy.Column(

@@ -4,6 +4,8 @@ from data.db_session import SqlAlchemyBase
 
 
 class Group(SqlAlchemyBase):
+    """Таблица избранных групп"""
+
     __tablename__ = 'group'
 
     id = sqlalchemy.Column(

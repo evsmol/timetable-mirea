@@ -4,6 +4,8 @@ from data.db_session import SqlAlchemyBase
 
 
 class Teacher(SqlAlchemyBase):
+    """Таблица избранных преподавателей"""
+
     __tablename__ = 'teacher'
 
     id = sqlalchemy.Column(

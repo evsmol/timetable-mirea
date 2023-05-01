@@ -21,13 +21,12 @@ def get_timetable(file, day_start, date_end):
     # список с датами
     start_date = datetime.strptime(day_start, "%d.%m.%Y")
     end_date = datetime.strptime(date_end, "%d.%m.%Y")
-
     dates = date_range(
         min(start_date, end_date),
         max(start_date, end_date)
     ).strftime('%d.%m.%Y %W %w').tolist()
 
-    # заполнение словаря
+    # заполнение списка
     for col in range(0, len(worksheet_list[1])):
         # получение значения ячейки
         cell = worksheet_list[1][col].value
@@ -36,6 +35,7 @@ def get_timetable(file, day_start, date_end):
         if cell is None or len(str(cell)) != 10 or len(cell.split('-')) != 3:
             continue
 
+        # исключение аспирантуры
         if cell.split('-')[0][2] == 'А':
             return []
 
@@ -43,9 +43,11 @@ def get_timetable(file, day_start, date_end):
         pair_number = None
         week_day = None
         for row in range(3, 87):
+            # номер пары
             if worksheet_list[row][1].value:
                 pair_number = int(worksheet_list[row][1].value)
 
+            # день недели
             if worksheet_list[row][0].value:
                 if worksheet_list[row][0].value == 'ПОНЕДЕЛЬНИК':
                     week_day = 1
@@ -63,20 +65,39 @@ def get_timetable(file, day_start, date_end):
             if not worksheet_list[row][col].value:
                 continue
 
+            # номер недели
             week = 1 if worksheet_list[row][col - 1].value == 'I' \
                         or worksheet_list[row][col - 6].value == 'I' else 0
+            # название дисциплины
             discipline = worksheet_list[row][col].value
+            # тип занятия
             activity_type = worksheet_list[row][col + 1].value
+            # преподаватель
             teacher = worksheet_list[row][col + 2].value
             if teacher is None:
                 teacher = ''
+            # аудитория
             auditorium = worksheet_list[row][col + 3].value
 
+            # разделение пар-двоек
             if '\n' not in discipline:
                 timelist.append((week, week_day,
                                  cell.strip(), pair_number,
                                  discipline.strip(), activity_type.strip(),
                                  teacher.strip(), auditorium.strip()))
+            elif '\n' not in auditorium:
+                timelist.append((week, week_day,
+                                 cell.strip(), pair_number,
+                                 discipline.split('\n')[0].strip(),
+                                 activity_type.split('\n')[0].strip(),
+                                 ' '.join(teacher.split()[:2]).strip(),
+                                 auditorium.strip()))
+                timelist.append((week, week_day,
+                                 cell.strip(), pair_number,
+                                 discipline.split('\n')[1].strip(),
+                                 activity_type.split('\n')[1].strip(),
+                                 ' '.join(teacher.split()[2:]).strip(),
+                                 auditorium.strip()))
             else:
                 timelist.append((week, week_day,
                                  cell.strip(), pair_number,
