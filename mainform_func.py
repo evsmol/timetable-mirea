@@ -79,7 +79,7 @@ def fill_pairs(groups_list, teachers_list, auditoriums_list,
                     item.__hash__ = pair.pair_number
                     icon = QIcon(f'image/group{pair.pair_number}.png')
                     item.setIcon(icon)
-                    item.setFont(QFont('Arial', 10))
+                    item.setFont(QFont('Arial', item.font().pointSize() * 0.9))
                     item.icon()
                     dates[dates_str.index(pair.date)].addItem(item)
 
@@ -107,7 +107,7 @@ def fill_pairs(groups_list, teachers_list, auditoriums_list,
                     item.__hash__ = pair.pair_number
                     icon = QIcon(f'image/teacher{pair.pair_number}.png')
                     item.setIcon(icon)
-                    item.setFont(QFont('Arial', 10))
+                    item.setFont(QFont('Arial', item.font().pointSize() * 0.9))
                     dates[dates_str.index(pair.date)].addItem(item)
 
     # заполнение пар выбранных аудиторий
@@ -132,7 +132,7 @@ def fill_pairs(groups_list, teachers_list, auditoriums_list,
                     item.__hash__ = pair.pair_number
                     icon = QIcon(f'image/auditorium{pair.pair_number}.png')
                     item.setIcon(icon)
-                    item.setFont(QFont('Arial', 10))
+                    item.setFont(QFont('Arial', item.font().pointSize() * 0.9))
                     dates[dates_str.index(pair.date)].addItem(item)
 
     # проверка наличия фильтра

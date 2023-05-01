@@ -31,6 +31,9 @@ if __name__ == '__main__':
         os.mkdir('db')
         sqlite3.connect('db/timetable.db')
         logging(datetime.now(), 'INFO', 'Создание «db/timetable.db»')
+    if not os.path.isfile('db/timetable.db'):
+        sqlite3.connect('db/timetable.db')
+        logging(datetime.now(), 'INFO', 'Создание «timetable.db»')
 
     # подключение к базе данных
     db_session.global_init('db/timetable.db')

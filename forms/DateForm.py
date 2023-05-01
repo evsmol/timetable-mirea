@@ -71,15 +71,19 @@ class DateForm(QMainWindow):
         # добавление уведомления о времени загрузки расписания
         message_box = QMessageBox()
 
+        message_box.setWindowTitle('Предупреждение')
+        message_box.setWindowIcon(QIcon('image/icon.png'))
         message_box.setText('Для загрузки расписания может потребоваться '
                             'некоторое время')
-        message_box.addButton('Загрузить', QMessageBox.ButtonRole.ApplyRole)
-        message_box.addButton('Отменить', QMessageBox.ButtonRole.RejectRole)
+        message_box.addButton('Загрузить', QMessageBox.ButtonRole.YesRole)
+        message_box.addButton('Отменить', QMessageBox.ButtonRole.NoRole)
 
         ret = message_box.exec()
+        print(ret)
 
         # если нажата кнопка подтверждения
-        if ret == 8:
+        if ret == 0 or ret == 5:
+            self.close()
             # обновление базы данных
             update_db(
                 self.date_start.text(),
@@ -112,7 +116,6 @@ class DateForm(QMainWindow):
             # обновление списков в основном окне программы
             self.main_form.update_lists()
 
-            self.close()
 
     def closeEvent(self, event):
         logging(datetime.now(), 'WARNING',

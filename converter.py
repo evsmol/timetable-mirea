@@ -6,7 +6,7 @@ from datetime import datetime
 
 def get_timetable(file, day_start, date_end):
     # загрузка книги
-    workbook = load_workbook(file, read_only=True)
+    workbook = load_workbook(file)
     worksheet = workbook.active
 
     # создание списка строк страницы
@@ -173,4 +173,6 @@ def get_timetable(file, day_start, date_end):
                                        ('teacher', teacher),
                                        ('auditorium', auditorium)]))
 
+    workbook.save(file)
+    workbook.close()
     return timetable
